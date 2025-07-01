@@ -6,8 +6,8 @@ Enhance your GitHub Copilot experience with community-contributed instructions, 
 
 GitHub Copilot provides three main ways to customize AI responses and tailor assistance to your specific workflows, team guidelines, and project requirements:
 
-| **🔧 Custom Instructions**                                                                                                                                                                                                                                                 | **📝 Reusable Prompts**                                                                                                                                                                                                                                              | **🎭 Custom Chat Modes**                                                                                                                                                                                                      |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **🔧 Custom Instructions** | **📝 Reusable Prompts** | **🎭 Custom Chat Modes** |
+| --- | --- | --- |
 | Define common guidelines for tasks like code generation, reviews, and commit messages. Describe *how* tasks should be performed<br><br>**Benefits:**<br>• Automatic inclusion in every chat request<br>• Repository-wide consistency<br>• Multiple implementation options | Create reusable, standalone prompts for specific tasks. Describe *what* should be done with optional task-specific guidelines<br><br>**Benefits:**<br>• Eliminate repetitive prompt writing<br>• Shareable across teams<br>• Support for variables and dependencies | Define chat behavior, available tools, and codebase interaction patterns within specific boundaries for each request<br><br>**Benefits:**<br>• Context-aware assistance<br>• Tool configuration<br>• Role-specific workflows |
 
 > **💡 Pro Tip:** Custom instructions only affect Copilot Chat (not inline code completions). You can combine all three customization types - use custom instructions for general guidelines, prompt files for specific tasks, and chat modes to control the interaction context.
@@ -36,11 +36,11 @@ Team and project-specific instructions to enhance GitHub Copilot's behavior for 
 - [Python Coding Conventions](instructions/python.md) - Python coding conventions and guidelines
 
 
-> 💡 **Usage**: Copy these instructions to your `.github/copilot-instructions.md` file or create task-specific `.instructions.md` files in your workspace.
+> 💡 **Usage**: Copy these instructions to your `.github/copilot-instructions.md` file or create task-specific `.github/.instructions.md` files in your workspace's `.github/instructions` folder.
 
 ## 🎯 Reusable Prompts
 
-Ready-to-use prompt templates for specific development scenarios and tasks. These `.prompt.md` files can be executed directly in VS Code chat as slash commands or through the `Chat: Run Prompt` command.
+Ready-to-use prompt templates for specific development scenarios and tasks, defining prompt text with a specific mode, model, and available set of tools.
 
 ### Backend Development
 - [ASP.NET Minimal API with OpenAPI](prompts/aspnet-minimal-api-openapi.prompt.md) - Generate API endpoints with proper documentation
@@ -58,7 +58,7 @@ Ready-to-use prompt templates for specific development scenarios and tasks. Thes
 - [Comment Code Generate Tutorial](prompts/comment-code-generate-a-tutorial.prompt.md) - Transform code into educational content
 - [Generate Specs as Issues](prompts/gen-specs-as-issues.prompt.md) - Convert requirements into GitHub issues
 
-> 💡 **Usage**: Use `/prompt-name` in VS Code chat or run `Chat: Run Prompt` command. Prompt files support variables like `${input:name}` for dynamic content.
+> 💡 **Usage**: Use `/prompt-name` in VS Code chat, run `Chat: Run Prompt` command, or hit the run button while you have a prompt open.
 
 ## 📚 Additional Resources
 
