@@ -14,8 +14,19 @@ applyTo: '**/*.cs, **/*.csproj, **/*.json'
 - Always use **dependency injection** for services and configuration management
 - Ask before adding any extra dependencies to the project
 - The API is built using **Azure Functions using .NET 9 Isolated Worker Process**
+- Use **`FunctionsApplication.CreateBuilder`** as the hosting model for optimal performance and developer experience
 - Each endpoint should have its own function class, using the naming convention: `src/API/Functions/<ResourceName>Functions.cs`
 - When making changes to the API, make sure to update OpenAPI documentation and `README.md` accordingly
+
+## Azure Functions Hosting Model
+
+- **Always use `FunctionsApplication.CreateBuilder`** instead of generic `HostBuilder` for new Azure Functions projects
+- This provides **faster cold starts** and **memory efficiency** optimized for serverless scenarios
+- Benefits include **reduced boilerplate code**, better **IntelliSense support**, and **future-proof** alignment with Microsoft's recommendations
+- **Pre-configured services**: Application Insights, logging, and configuration are automatically set up with appropriate defaults
+- **Optimized for Functions runtime**: Purpose-built for Azure Functions with minimal resource footprint
+- **Clean Architecture alignment**: Simpler configuration reduces complexity in Clean Architecture implementation
+- **Better debugging experience**: Enhanced integration with Azure Functions Core Tools and local development
 
 ## Function Development Standards
 
@@ -49,6 +60,7 @@ applyTo: '**/*.cs, **/*.csproj, **/*.json'
 
 ## Performance Optimization Guidelines
 
+- Use **`FunctionsApplication.CreateBuilder`** for optimized cold start performance and memory efficiency
 - Configure appropriate **batch sizes** for supported triggers in `host.json`
 - Use **connection pooling** for database and external service connections
 - Enable **compression** for larger payloads using response compression middleware
@@ -56,6 +68,7 @@ applyTo: '**/*.cs, **/*.csproj, **/*.json'
 - Optimize **response serialization** using System.Text.Json with appropriate converters
 - **Avoid long-running functions** - consider Durable Functions for extended processes
 - Use **Polly** for implementing retry patterns with exponential backoff for transient failures
+- Leverage **pre-configured Functions services** to reduce initialization overhead
 
 ## Data & Storage Management
 
@@ -103,8 +116,10 @@ applyTo: '**/*.cs, **/*.csproj, **/*.json'
 - Use **feature folders** structure: `/Features/{FeatureName}/{Functions|Services|Models}`
 - Implement **service layer** patterns for business logic separation from function triggers
 - Create **shared models** and **DTOs** in separate projects for reusability
-- Use **dependency injection extensions** for clean service registration
+- Use **dependency injection extensions** for clean service registration with `FunctionsApplication.CreateBuilder`
 - Follow **namespace conventions**: `ProjectName.{Layer}.{Feature}`
+- Leverage **Functions-specific APIs** for better IntelliSense support and reduced configuration errors
+- Minimize **configuration boilerplate** by using the Functions builder's sensible defaults
 
 ## Error Handling & Resilience
 
@@ -114,3 +129,13 @@ applyTo: '**/*.cs, **/*.csproj, **/*.json'
 - Implement **circuit breaker** patterns for external service dependencies
 - Log **security events** and **audit trails** for compliance and debugging
 - Handle **timeout scenarios** gracefully with appropriate user feedback
+
+## Development Productivity Guidelines
+
+- **Faster Development**: Leverage `FunctionsApplication.CreateBuilder` for reduced configuration overhead and faster feature delivery
+- **Reduced Learning Curve**: Use Functions-specific patterns that are simpler for team members new to Azure Functions
+- **Fewer Configuration Errors**: Rely on sensible defaults to minimize opportunity for misconfiguration
+- **Better IDE Experience**: Take advantage of Functions-specific IntelliSense and tooling support
+- **Future-Proof Architecture**: Align with Microsoft's long-term support strategy for .NET 9+ Azure Functions
+- **Community Alignment**: Follow mainstream patterns for better community support and documentation availability
+- **Maintenance Efficiency**: Minimize configuration surface area to reduce long-term maintenance costs
