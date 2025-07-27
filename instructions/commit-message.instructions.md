@@ -1,5 +1,5 @@
 ---
-description: "Commit message generation guidelines for PasswordManager project"
+description: "Commit message generation guidelines"
 applyTo: "**"
 ---
 
