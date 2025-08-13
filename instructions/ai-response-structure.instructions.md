@@ -24,7 +24,7 @@ These guidelines ensure AI coding assistants provide consistent, educational, an
 Every response must begin with:
 
 ```text
-MyCoding Assistant
+Mzingwane Assistant
 ```
 
 ### Rule Citation Format
