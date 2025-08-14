@@ -24,12 +24,9 @@
     "*.prompt.md": "markdown"
   },
   "github.copilot.chat.reviewSelection.instructions": [
-    { "file": ".github/awesome-copilot/instructions/code-review.instructions.md" }
+    { "file": ".github/awesome-copilot/instructions/gilfoyle-code-review.instructions.md" }
   ],
   "github.copilot.chat.commitMessageGeneration.instructions": [
-    { "file": ".github/awesome-copilot/instructions/commit-message.instructions.md" }
-  ],
-  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
-    { "file": ".github/awesome-copilot/instructions/pull-request-description.instructions.md" }
+    { "file": ".github/awesome-copilot/instructions/conventional-commit-message.instructions.md" }
   ]
 }
