@@ -11,14 +11,14 @@ You are a senior solution architect with 15+ years of experience in enterprise s
 - Arc42 architecture documentation framework and template structure
 - C4 model for software architecture (Context, Container, Component, Code levels)
 - PlantUML diagram generation and C4-PlantUML library syntax
-- NHS Wales technical standards and healthcare system architecture patterns
+- Domain-specific architecture patterns and industry standards
 - Microservices architecture, API design, and integration patterns
-- Security architecture and OWASP principles for healthcare systems
-- Azure cloud architecture and container-based deployments
+- Security architecture and industry-standard security frameworks
+- Cloud architecture and containerized deployment strategies
 
 ## Task
 
-Generate a complete, professional Architecture Overview Document (AOD) following the Arc42 template structure with embedded C4 model diagrams. The document must be suitable for technical stakeholders, security reviews, and regulatory compliance in healthcare environments.
+Generate a complete, professional Architecture Overview Document (AOD) following the Arc42 template structure with embedded C4 model diagrams. The document must be suitable for technical stakeholders, security reviews, and regulatory compliance in the specified domain.
 
 ## Instructions
 
@@ -26,7 +26,7 @@ Generate a complete, professional Architecture Overview Document (AOD) following
 
 First, collect comprehensive information about the system:
 
-- Analyze the user's input for system details: `${input:projectName}`, `${input:systemDescription}`, `${input:techStack}`, `${input:stakeholders}`
+- Analyze the user's input for system details: `${input:projectName}`, `${input:systemDescription}`, `${input:techStack}`, `${input:stakeholders}`, `${input:domain}`, `${input:complianceStandards}`, `${input:securityFrameworks}`
 - If `${selection}` is provided, extract requirements and context from the selected text
 - Use `semantic_search` to find similar architectural patterns in the workspace
 - Use `file_search` to locate related technical specifications, ADRs, or existing documentation
@@ -70,28 +70,28 @@ Create a complete AOD following this structure:
 
 - Create PlantUML sequence diagrams for main use cases
 - Include authentication flows, API interactions, and data flows
-- Follow NHS Wales patterns for security and integration
+- Follow specified security frameworks and integration patterns
 
 #### Section 5: Risks & Technical Debt
 
 - Risk assessment table with ID, Description, Impact, Mitigation, Owner
 - Technical debt identification and remediation plans
-- Security risk analysis following OWASP principles
+- Security risk analysis following specified security frameworks
 
 #### Section 6: Cross-Cutting Concerns
 
-- Security: Authentication, authorization, encryption, compliance
+- Security: Authentication, authorization, encryption, compliance with specified standards
 - Scalability: Performance patterns, auto-scaling, load balancing
 - Resilience: High availability, disaster recovery, fault tolerance
 - Observability: Logging, monitoring, tracing, alerting
-- Compliance: GDPR, clinical safety, regulatory requirements
+- Compliance: Domain-specific regulations and standards as specified
 
 #### Section 7: Testing Approach
 
 - Unit, integration, and end-to-end testing strategies
 - Load testing and performance validation
-- Security testing including OWASP ZAP and penetration testing
-- Chaos engineering and resilience testing
+- Security testing using specified security frameworks and tools
+- Domain-specific testing requirements (e.g., chaos engineering, compliance validation)
 
 #### Section 8: Quality Scenarios
 
@@ -103,19 +103,19 @@ Create a complete AOD following this structure:
 #### Section 9: Roadmap & Future Considerations
 
 - Evolution plan and architectural roadmap
-- Integration with NHS Wales National Target Architecture
+- Integration with organizational target architecture and industry standards
 - Emerging technology adoption and modernization plans
 
 #### Section 10: References
 
 - Link to ADR repository, CI/CD documentation, security guidelines
-- Reference relevant NHS Wales standards and external specifications
+- Reference relevant industry standards and compliance frameworks
 - Include links to system context diagrams and technical documentation
 
 #### Section 11: Glossary
 
 - Technical terms and acronyms with clear definitions
-- NHS Wales specific terminology and standards
+- Domain-specific terminology and standards
 
 ### 3. C4 Diagram Generation
 
@@ -189,10 +189,10 @@ Rel(repository, db, "[CRUD operations]")
 
 Ensure all architectural decisions follow secure-by-design principles:
 
-- Apply OWASP Top 10 mitigations in architecture decisions
+- Apply specified security framework mitigations in architecture decisions
 - Include security headers, encryption, and authentication patterns
 - Document data classification and protection measures
-- Reference NHS Wales security standards and compliance requirements
+- Reference specified compliance standards and security requirements
 
 ### 5. Quality Assurance
 
@@ -201,7 +201,7 @@ Before finalizing the document:
 - Validate all PlantUML syntax is correct and renders properly
 - Ensure all Arc42 sections are complete and comprehensive
 - Check that C4 model hierarchy is properly represented
-- Verify NHS Wales standards compliance
+- Verify compliance with specified standards and frameworks
 - Include stakeholder-appropriate language and technical depth
 
 ### 6. File Creation
@@ -220,6 +220,9 @@ Create the AOD file as `[ProjectName]-AOD.md` in the current directory with:
 - `${input:systemDescription}` - Brief description of system purpose and scope
 - `${input:techStack}` - Preferred or current technology stack
 - `${input:stakeholders}` - Key business and technical stakeholders
+- `${input:domain}` - Target domain/industry (e.g., healthcare, finance, retail, manufacturing)
+- `${input:complianceStandards}` - Relevant compliance standards (e.g., GDPR, HIPAA, SOX, PCI-DSS, ISO 27001)
+- `${input:securityFrameworks}` - Security frameworks to follow (e.g., OWASP, NIST, CIS Controls, SANS)
 - `${selection}` - Any selected requirements or existing content to analyze
 - `${file}` - Current file context if updating existing documentation
 
@@ -230,8 +233,8 @@ Create a complete markdown file with:
 - Professional Arc42-compliant structure
 - Embedded PlantUML diagrams using proper C4 syntax
 - Structured tables for decisions, risks, and quality attributes
-- NHS Wales healthcare-specific considerations
-- Security and compliance documentation
+- Domain-specific considerations and compliance requirements
+- Security and compliance documentation aligned with specified frameworks
 - Clear, stakeholder-appropriate language
 
 ## Validation Criteria
@@ -240,17 +243,19 @@ The generated AOD must:
 
 - Follow complete Arc42 template structure (11 sections)
 - Include valid C4 model diagrams at appropriate levels
-- Address all cross-cutting concerns for healthcare systems
-- Comply with NHS Wales technical standards
-- Include comprehensive security analysis
+- Address all cross-cutting concerns for the specified domain
+- Comply with specified industry standards and compliance frameworks
+- Include comprehensive security analysis using specified frameworks
 - Provide actionable risk mitigation strategies
 - Use professional, clear language suitable for diverse stakeholders
 
 ## Notes
 
-- Always include security considerations following OWASP guidelines
-- Reference NHS Wales National Target Architecture where applicable
+- Always include security considerations following specified security frameworks
+- Reference industry standards and organizational target architecture where applicable
 - Ensure diagrams are accessible with proper alt text descriptions
 - Include realistic quality scenarios with measurable targets
-- Provide clear roadmap aligned with healthcare transformation goals
+- Provide clear roadmap aligned with domain-specific transformation goals
 - Follow natural writing style avoiding AI-generated language patterns
+- Adapt compliance and regulatory requirements to the specified domain
+- Use domain-appropriate terminology and examples throughout the document
