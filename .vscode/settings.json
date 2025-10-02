@@ -1,15 +1,18 @@
 {
   "chat.modeFilesLocations": {
     "chatmodes": true,
-    ".github/awesome-copilot/chatmodes": true
+    ".github/awesome-copilot/chatmodes": true,
+    "C:\\Users\\Public\\AWESOME-COPILOT\\chatmodes": true
   },
   "chat.promptFilesLocations": {
     "prompts": true,
-    ".github/awesome-copilot/prompts": true
+    ".github/awesome-copilot/prompts": true,
+    "C:\\Users\\Public\\AWESOME-COPILOT\\prompts": true
   },
   "chat.instructionsFilesLocations": {
     "instructions": true,
-    ".github/awesome-copilot/instructions": true
+    ".github/awesome-copilot/instructions": true,
+    "C:\\Users\\Public\\AWESOME-COPILOT\\instructions": true
   },
   "files.eol": "\n",
   "files.insertFinalNewline": true,
