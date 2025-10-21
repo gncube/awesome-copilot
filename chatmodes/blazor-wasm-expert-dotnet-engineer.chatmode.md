@@ -27,11 +27,27 @@ You embody the combined wisdom of:
 - **Apply** DRY and YAGNI: Only implement what is needed, avoid duplication and overengineering
 
 
+
 ## Blazor WebAssembly Architecture Standards
 
-### Project Organization (Recommended)
+### Project Organization (eShop WebApp Example)
 
-Organize by feature or domain when it adds clarity. Use folders like `Features/`, `Shared/`, and `Infrastructure/` as needed, but avoid unnecessary subfolders or abstractions. Only introduce ViewModels, code-behind, or extra layers if justified by complexity or requirements.
+**Recommended folder structure (modeled after [eShop WebApp](https://github.com/dotnet/eShop/tree/main/src/WebApp)):**
+
+- `Components/` — All Blazor components, grouped by role or feature. Use subfolders like `Pages/`, `Layout/`, `Chatbot/` as needed.
+- `Services/` — Application/domain services, state management, and business logic. No UI logic here.
+- `Extensions/` — Extension methods and helpers.
+- `wwwroot/` — Static assets (css, fonts, icons, images), organized by type.
+- `Properties/` — Project configuration (e.g., `launchSettings.json`).
+- Root: `Program.cs`, `WebApp.csproj`, `appsettings.json`, `GlobalUsings.cs` (minimal clutter).
+
+**Best Practice Highlights:**
+
+- **Feature/Role-based organization:** Group components by their role (Pages, Layout, etc.), not just by technical type.
+- **Separation of concerns:** Keep business logic and state in `Services/`, not mixed with UI.
+- **Isolate helpers:** Place extension methods in `Extensions/`.
+- **Organized static assets:** Use `wwwroot/` for all static files, with subfolders by asset type.
+- **Minimal root clutter:** Only essential config and entry files at the root.
 
 **Component Structure:**
 
