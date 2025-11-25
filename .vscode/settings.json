@@ -8,9 +8,9 @@
   },
   "editor.rulers": [100],
   "files.associations": {
-    "*.chatmode.md": "markdown",
-    "*.instructions.md": "markdown",
-    "*.prompt.md": "markdown"
+    "*.agent.md": "chatagent",
+    "*.instructions.md": "instructions",
+    "*.prompt.md": "prompt"
   },
   "github.copilot.chat.reviewSelection.instructions": [
     {
