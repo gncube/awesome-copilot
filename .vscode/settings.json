@@ -12,16 +12,6 @@
     "*.instructions.md": "instructions",
     "*.prompt.md": "prompt"
   },
-  "github.copilot.chat.reviewSelection.instructions": [
-    {
-      "file": "instructions/gilfoyle-code-review.instructions.md"
-    }
-  ],
-  "github.copilot.chat.commitMessageGeneration.instructions": [
-    {
-      "file": "instructions/commit-message.instructions.md"
-    }
-  ],
   "yaml.schemas": {
     "./.schemas/collection.schema.json": "*.collection.yml"
   }
