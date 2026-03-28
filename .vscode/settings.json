@@ -1,13 +1,4 @@
 {
-  "chat.modeFilesLocations": {
-    "chatmodes": true
-  },
-  "chat.promptFilesLocations": {
-    "prompts": true
-  },
-  "chat.instructionsFilesLocations": {
-    "instructions": true
-  },
   "files.eol": "\n",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
@@ -17,18 +8,12 @@
   },
   "editor.rulers": [100],
   "files.associations": {
-    "*.chatmode.md": "markdown",
-    "*.instructions.md": "markdown",
-    "*.prompt.md": "markdown"
+    "*.agent.md": "chatagent",
+    "*.instructions.md": "instructions",
+    "*.prompt.md": "prompt"
   },
-  "github.copilot.chat.reviewSelection.instructions": [
-    {
-      "file": "instructions/gilfoyle-code-review.instructions.md"
-    }
-  ],
-  "github.copilot.chat.commitMessageGeneration.instructions": [
-    {
-      "file": "instructions/commit-message.instructions.md"
-    }
-  ]
+  "yaml.schemas": {
+    "./.schemas/collection.schema.json": "*.collection.yml",
+    "./.schemas/tools.schema.json": "website/data/tools.yml",
+  }
 }
