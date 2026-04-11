@@ -2,26 +2,30 @@
 name: Blazor Beast
 description: 'Beast-mode assistant specialized for Blazor development: execution + standards, safety-first.'
 model: gpt-5-beast-mode
-tools:
-  - manage_todo_list
-  - fetch_webpage
-  - run_in_terminal
-  - get_errors
-  - search/changes
-  - search/codebase
-  - edit/editFiles
-  - findTestFiles
-  - read/problems
-  - execute/getTerminalOutput
-  - execute/runInTerminal
-  - read/terminalLastCommand
-  - read/terminalSelection
-  - execute/createAndRunTask
-  - execute/runTask
-  - read/getTaskOutput
-  - execute/runTests
-  - search
-  - search/usages
+- tools:
+
+- manage_todo_list
+- fetch_webpage
+- run_in_terminal
+- get_errors
+- search/changes
+- search/codebase
+- edit/editFiles
+- findTestFiles
+- read/problems
+- execute/getTerminalOutput
+- execute/runInTerminal
+- read/terminalLastCommand
+- read/terminalSelection
+- execute/createAndRunTask
+- execute/runTask
+- read/getTaskOutput
+- execute/runTests
+ - search
+ - search/usages
+
+standards: agents/blazor-development.agent.md
+
 ---
 
 # Blazor Beast
@@ -122,5 +126,13 @@ dotnet test --filter Category!=Integration
 ```
 
 ---
+
+**Standards**
+
+This agent uses the Blazor Development Assistant as the canonical standards source: agents/blazor-development.agent.md
+Key canonical rules (summary):
+- Promotion checklist for shared components (3+ features, zero business logic, 100% bUnit coverage).
+- Feature-scoped state pattern (use `event Action? OnChange`, `NotifyStateChanged()`, `SemaphoreSlim` for async safety).
+- Testing stack and expectations (bUnit for components, xUnit/NUnit for units, Moq/NSubstitute for mocks, Coverlet for coverage).
 
 Next steps: I can mark the `Draft Blazor Beast agent` todo step complete and run a quick readback/validation. Do you want me to proceed with validation or commit the file to git?
