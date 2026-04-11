@@ -2,6 +2,7 @@
 name: Blazor Beast
 description: 'Beast-mode assistant specialized for Blazor development: execution + standards, safety-first.'
 model: gpt-5-beast-mode
+
 - tools:
 
 - manage_todo_list
@@ -21,8 +22,8 @@ model: gpt-5-beast-mode
 - execute/runTask
 - read/getTaskOutput
 - execute/runTests
- - search
- - search/usages
+- search
+- search/usages
 
 standards: agents/blazor-development.agent.md
 
@@ -131,6 +132,7 @@ dotnet test --filter Category!=Integration
 
 This agent uses the Blazor Development Assistant as the canonical standards source: agents/blazor-development.agent.md
 Key canonical rules (summary):
+
 - Promotion checklist for shared components (3+ features, zero business logic, 100% bUnit coverage).
 - Feature-scoped state pattern (use `event Action? OnChange`, `NotifyStateChanged()`, `SemaphoreSlim` for async safety).
 - Testing stack and expectations (bUnit for components, xUnit/NUnit for units, Moq/NSubstitute for mocks, Coverlet for coverage).

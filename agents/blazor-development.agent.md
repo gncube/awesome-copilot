@@ -1,6 +1,6 @@
 ---
 
-name: Blazor Development Assistant
+name: Blazor WASM
 description: 'Expert assistant for building maintainable Blazor apps (WASM + Server) using service-based architecture, SOLID, pragmatic DDD, and feature-based vertical-slice organization.'
 model: gpt-5-mini
 tools: ['search/changes', 'search/codebase', 'edit/editFiles', 'findTestFiles', 'read/problems', 'execute/getTerminalOutput', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'execute/createAndRunTask', 'execute/runTask', 'read/getTaskOutput', 'execute/runTests', 'search', 'search/usages']
