@@ -1,0 +1,86 @@
+@startuml Blazor_WASM_Azure_Architecture
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+' === GPW Enterprise Branding ===
+AddElementTag("gpw", $bgColor="#4F46E5", $fontColor="#FFFFFF", $borderColor="#3730A3")
+AddElementTag("gpw-external", $bgColor="#6366F1", $fontColor="#FFFFFF", $borderColor="#4F46E5")
+
+' === Azure Service Tags ===
+AddContainerTag("azure-staticweb", $bgColor="#E6F2FF", $borderColor="#0078D4", $sprite="azurestaticwebapps", $techn="Static Web App")
+AddContainerTag("azure-func", $bgColor="#E6F2FF", $borderColor="#0078D4", $sprite="azurefunctions", $techn="Azure Function")
+AddContainerTag("azure-sql", $bgColor="#E6F2FF", $borderColor="#0078D4", $sprite="azuresqldatabase", $techn="SQL Database")
+AddContainerTag("azure-keyvault", $bgColor="#E6F2FF", $borderColor="#0078D4", $sprite="azurekeyvault", $techn="Key Vault")
+AddContainerTag("azure-servicebus", $bgColor="#E6F2FF", $borderColor="#0078D4", $sprite="azureservicebus", $techn="Service Bus")
+AddContainerTag("azure-appinsights", $bgColor="#E6F2FF", $borderColor="#0078D4", $sprite="azureapplicationinsights", $techn="App Insights")
+
+' === Environment Tags ===
+AddElementTag("prod", $bgColor="#FFEBEE", $borderColor="#D32F2F", $legendText="Production")
+AddElementTag("managed-identity", $bgColor="#F3E5F5", $borderColor="#7B1FA2", $legendText="Managed Identity")
+
+' === Actors ===
+Person(user, "User", "Web Browser", $tags="gpw")
+Person_Ext(admin, "Administrator", "Portal Access", $tags="gpw-external")
+
+' === Frontend Boundary ===
+Container_Boundary(frontend_boundary, "Frontend Tier - Azure CDN/Static Web Apps", $tags="gpw") {
+    Container(blazor_app, "Blazor WASM App", "WebAssembly + C#", "Interactive single-page app with real-time data binding", $tags="azure-staticweb+prod")
+    Container(cdn, "Azure CDN", "Content Delivery", "Caches static assets globally for performance", $tags="azure-staticweb+prod")
+}
+
+' === API Tier Boundary ===
+Container_Boundary(api_boundary, "API Tier - Azure Functions", $tags="gpw") {
+    Container(api_gateway, "API Gateway Function", "Azure Function (HTTP Trigger)", "Orchestrates requests, handles CORS, rate limiting", $tags="azure-func+prod+managed-identity")
+    Container(auth_func, "Authentication Function", "Azure Function (HTTP Trigger)", "JWT token generation and validation", $tags="azure-func+prod+managed-identity")
+    Container(business_logic, "Business Logic Function", "Azure Function (HTTP Trigger)", "Core domain logic, calculations, transformations", $tags="azure-func+prod+managed-identity")
+    Container(async_processor, "Async Processor Function", "Azure Function (Service Bus Trigger)", "Processes long-running tasks, batch operations", $tags="azure-func+prod+managed-identity")
+    
+    Rel(api_gateway, auth_func, "delegates auth", "HTTP")
+    Rel(api_gateway, business_logic, "routes requests", "HTTP")
+    Rel(business_logic, async_processor, "publishes to", "AMQP")
+}
+
+' === Data & Security Tier Boundary ===
+Container_Boundary(data_boundary, "Data & Security Tier", $tags="gpw") {
+    Container(secrets_vault, "Azure Key Vault", "Secrets Management", "Stores connection strings, API keys, certificates", $tags="azure-keyvault+prod+managed-identity")
+    ContainerDb(sql_db, "Azure SQL Database", "SQL Server", "Relational database for business data, audit logs", $tags="azure-sql+prod")
+    Container(message_queue, "Service Bus", "Message Queue", "Async messaging for inter-service communication", $tags="azure-servicebus+prod+managed-identity")
+}
+
+' === Observability Boundary ===
+Container_Boundary(observability_boundary, "Observability & Monitoring", $tags="gpw") {
+    Container(app_insights, "Application Insights", "Telemetry & Analytics", "Logs, traces, metrics, performance monitoring", $tags="azure-appinsights+prod+managed-identity")
+}
+
+' === External Integrations ===
+System_Ext(auth_provider, "Azure Entra ID", "Identity Provider", $tags="gpw-external+prod")
+
+' === Relationships: User to Frontend ===
+Rel(user, blazor_app, "navigates to", "HTTPS")
+Rel(user, cdn, "requests assets from", "HTTPS/CDN")
+
+' === Relationships: Frontend to API ===
+Rel(blazor_app, api_gateway, "calls API", "HTTPS REST")
+
+' === Relationships: API to Data/Security ===
+Rel(api_gateway, secrets_vault, "retrieves secrets", "HTTPS + Managed Identity")
+Rel(auth_func, secrets_vault, "retrieves JWT secret", "HTTPS + Managed Identity")
+Rel(business_logic, sql_db, "queries/updates data", "TDS/JDBC")
+Rel(business_logic, app_insights, "logs telemetry", "HTTPS")
+Rel(async_processor, message_queue, "consumes messages", "AMQP 1.0")
+Rel(async_processor, sql_db, "writes results", "TDS/JDBC")
+Rel(async_processor, app_insights, "logs events", "HTTPS")
+
+' === Relationships: API to Auth ===
+Rel(auth_func, auth_provider, "validates identity", "OAuth 2.0")
+
+' === Administrator Access ===
+Rel(admin, app_insights, "monitors", "HTTPS")
+Rel(admin, secrets_vault, "manages (RBAC)", "HTTPS")
+
+' === Cross-tier Relationships ===
+Rel(api_gateway, app_insights, "logs requests/responses", "HTTPS")
+
+SHOW_LEGEND()
+@enduml
