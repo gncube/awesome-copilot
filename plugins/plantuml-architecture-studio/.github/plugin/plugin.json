@@ -1,0 +1,37 @@
+{
+  "name": "plantuml-architecture-studio",
+  "version": "1.0.0",
+  "displayName": "PlantUML Architecture Studio",
+  "description": "Professional architecture diagram generation with C4-PlantUML, enterprise branding templates, and enterprise-grade documentation integration.",
+  "publisher": "github",
+  "keywords": [
+    "plantuml",
+    "c4-model",
+    "architecture",
+    "diagrams",
+    "enterprise",
+    "branding",
+    "azure"
+  ],
+  "homepage": "https://github.com/github/awesome-copilot/tree/main/plugins/plantuml-architecture-studio",
+  "license": "MIT",
+  "agents": [
+    "agents/plantuml-architect.agent.md",
+    "agents/arch.agent.md",
+    "agents/high-level-big-picture-architect.agent.md"
+  ],
+  "skills": [
+    "skills/plantuml-c4-branding/SKILL.md",
+    "skills/azure-resource-visualizer/SKILL.md"
+  ],
+  "commands": [],
+  "tags": [
+    "architecture",
+    "diagrams",
+    "c4-model",
+    "enterprise",
+    "azure",
+    "documentation",
+    "branding"
+  ]
+}
