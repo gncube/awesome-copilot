@@ -20,6 +20,7 @@ A three-tier, cloud-native application stack:
 ### Real-World Use Case
 
 This architecture is ideal for:
+
 - ✅ Enterprise web applications with real-time data binding
 - ✅ SaaS platforms requiring global CDN distribution
 - ✅ Microservices with async task processing
@@ -39,12 +40,14 @@ Container_Boundary(frontend_boundary, "Frontend Tier - Azure CDN/Static Web Apps
 ```
 
 **Validation:**
+
 - ✅ Contains 2 substantive elements (Blazor App + CDN)
 - ✅ Both are real Container definitions (not just Rel calls)
 - ✅ Boundary name reflects content ("Frontend Tier")
 - ✅ Related elements grouped together (both frontend delivery)
 
 **No aliases-only boundaries** ❌ Example (INVALID):
+
 ```plantuml
 Container_Boundary(frontend, "Frontend") {
     Rel(user, someElement, "calls")  # Only a relationship, no definition!
@@ -61,13 +64,14 @@ Container_Boundary(api_boundary, "API Tier - Azure Functions") {
     Container(auth_func, "Authentication Function", ...)
     Container(business_logic, "Business Logic Function", ...)
     Container(async_processor, "Async Processor Function", ...)
-    
+
     Rel(api_gateway, auth_func, "delegates auth", ...)
     Rel(api_gateway, business_logic, "routes requests", ...)
 }
 ```
 
 **Validation:**
+
 - ✅ Contains 4 substantive Container elements
 - ✅ Internal relationships documented with specific verbs ("delegates", "routes", "publishes")
 - ✅ Mixed trigger types (HTTP and Service Bus) – architectural variety within tier
@@ -75,6 +79,7 @@ Container_Boundary(api_boundary, "API Tier - Azure Functions") {
 
 **Boundary Strategy:**
 All API services grouped together because:
+
 1. Deployed as single unit (Azure Functions app)
 2. Share infrastructure (Managed Identity, Key Vault)
 3. Serve single responsibility (API surface)
@@ -92,6 +97,7 @@ Container_Boundary(data_boundary, "Data & Security Tier") {
 ```
 
 **Validation:**
+
 - ✅ Contains 3 elements: 2 Container + 1 ContainerDb
 - ✅ All define substantive data/security resources
 - ✅ NOT just storage; includes security and messaging
@@ -99,6 +105,7 @@ Container_Boundary(data_boundary, "Data & Security Tier") {
 
 **Architectural Rationale:**
 Grouped together because:
+
 1. Restricted access (Managed Identity authentication)
 2. High-security zone
 3. Shared by API layer services
@@ -114,6 +121,7 @@ Container_Boundary(observability_boundary, "Observability & Monitoring") {
 ```
 
 **Validation:**
+
 - ✅ Contains 1 substantive element (App Insights)
 - ✅ Single-element boundaries are valid if they serve clear purpose
 - ✅ Boundary name reflects concern ("Observability & Monitoring")
@@ -145,6 +153,7 @@ AddContainerTag("azure-sql", $bgColor="#E6F2FF", $borderColor="#0078D4", $sprite
 ```
 
 **Benefits:**
+
 - ✅ Consistent Azure blue color scheme
 - ✅ Sprites render service icons
 - ✅ Legend displays all Azure services used
@@ -160,6 +169,7 @@ Container(auth_func, "Authentication Function", ..., $tags="azure-func+prod+mana
 ```
 
 **Result in Legend:**
+
 ```
 ┌─────────────────────────────┐
 │ Production               🔴  │
@@ -177,15 +187,15 @@ Container(auth_func, "Authentication Function", ..., $tags="azure-func+prod+mana
 
 This diagram uses **specific verb phrases**, not generic labels:
 
-| ✅ Good | ❌ Bad |
-|--------|--------|
-| `"calls API"` | `"uses"` |
-| `"delegates auth"` | `"talks to"` |
-| `"routes requests"` | `"communicates with"` |
-| `"publishes to"` | `"sends data to"` |
-| `"queries/updates data"` | `"accesses"` |
-| `"consumes messages"` | `"receives from"` |
-| `"retrieves secrets"` | `"gets"` |
+| ✅ Good                  | ❌ Bad                |
+| ------------------------ | --------------------- |
+| `"calls API"`            | `"uses"`              |
+| `"delegates auth"`       | `"talks to"`          |
+| `"routes requests"`      | `"communicates with"` |
+| `"publishes to"`         | `"sends data to"`     |
+| `"queries/updates data"` | `"accesses"`          |
+| `"consumes messages"`    | `"receives from"`     |
+| `"retrieves secrets"`    | `"gets"`              |
 
 ### Protocol Documentation
 
@@ -199,6 +209,7 @@ Rel(api_gateway, secrets_vault, "retrieves secrets", "HTTPS + Managed Identity")
 ```
 
 **Benefits:**
+
 - Developers know exact protocols and connection strings
 - Architects understand integration patterns
 - Security teams can validate authentication methods
@@ -251,27 +262,32 @@ Rel(async_processor, app_insights, "logs events", "HTTPS")
 ## Best Practices Demonstrated
 
 ### 1. **Container_Boundary-First Design**
+
 - ✅ Boundaries defined based on logical/architectural concerns (not just visual grouping)
 - ✅ Every boundary contains ≥1 substantive element
 - ✅ Related services grouped together
 
 ### 2. **Security & Identity**
+
 - ✅ Managed Identity tagged consistently (`$tags="managed-identity"`)
 - ✅ Key Vault access documented explicitly
 - ✅ External identity provider shown (Entra ID)
 - ✅ Admin access separately modeled
 
 ### 3. **Async Patterns**
+
 - ✅ Service Bus queue shown as messaging intermediary
 - ✅ Function trigger types varied (HTTP vs. trigger-based)
 - ✅ Long-running operations isolated
 
 ### 4. **Observability**
+
 - ✅ Application Insights as dedicated boundary
 - ✅ Telemetry relationships explicit
 - ✅ Admin monitoring role modeled
 
 ### 5. **Azure Service Integration**
+
 - ✅ All services tagged with Azure-specific sprites
 - ✅ Managed service advantages highlighted
 - ✅ Serverless model emphasized
@@ -283,6 +299,7 @@ Rel(async_processor, app_insights, "logs events", "HTTPS")
 ### ✅ HARD RULE: Boundary Integrity
 
 **Every boundary contains element definitions:**
+
 - Frontend: Blazor App + CDN ✅
 - API: 4 Functions ✅
 - Data: Key Vault + SQL + Service Bus ✅
@@ -295,27 +312,35 @@ Rel(async_processor, app_insights, "logs events", "HTTPS")
 ## How to Use This Sample
 
 ### 1. **Template for Similar Projects**
+
 Copy structure for other Blazor + Functions projects:
+
 ```
 Frontend Tier → API Tier → Data Tier → Observability
 ```
 
 ### 2. **Validation Reference**
+
 Use as checklist for your own diagrams:
+
 - [ ] Every boundary has elements?
 - [ ] Relationships have specific verbs?
 - [ ] Branding applied consistently?
 - [ ] Protocols documented?
 
 ### 3. **Architecture Review**
+
 Present to stakeholders:
+
 - Executives: Understand cloud consumption
 - Architects: Discuss design decisions
 - Developers: Implement against spec
 - Operations: Plan infrastructure
 
 ### 4. **Documentation**
+
 Commit alongside architecture decision records (ADRs):
+
 ```
 docs/adr/0001-blazor-wasm-azure.md  (decision)
 samples/blazor-wasm-azure-architecture.puml  (visual)
@@ -328,6 +353,7 @@ samples/blazor-wasm-azure-architecture.puml  (visual)
 To add more elements, follow this pattern:
 
 ### Add CI/CD Tier
+
 ```plantuml
 Container_Boundary(cicd_boundary, "CI/CD & Deployment") {
     Container(github_actions, "GitHub Actions", "Workflow Automation", ...)
@@ -336,12 +362,14 @@ Container_Boundary(cicd_boundary, "CI/CD & Deployment") {
 ```
 
 ### Add Additional Services
+
 ```plantuml
 Container(email_func, "Email Service Function", "Azure Function", ..., $tags="azure-func+prod")
 Rel(async_processor, email_func, "triggers email", "AMQP")
 ```
 
 ### Add Performance Optimization
+
 ```plantuml
 Container(cache, "Azure Cache for Redis", "Caching Layer", ..., $tags="azure-cache+prod")
 Rel(api_gateway, cache, "queries cache first", "Redis Protocol")
@@ -351,20 +379,21 @@ Rel(api_gateway, cache, "queries cache first", "Redis Protocol")
 
 ## Quick Reference: Key Patterns
 
-| Pattern | When to Use |
-|---------|------------|
-| Container_Boundary | Logical grouping of related services |
-| System_Ext | External third-party systems |
-| Rel() | Synchronous or documented communication |
-| Service Bus queue | Async, decoupled communication |
-| Managed Identity | Authentication without secrets in code |
-| CDN + Static Web | Global distribution of frontend assets |
+| Pattern            | When to Use                             |
+| ------------------ | --------------------------------------- |
+| Container_Boundary | Logical grouping of related services    |
+| System_Ext         | External third-party systems            |
+| Rel()              | Synchronous or documented communication |
+| Service Bus queue  | Async, decoupled communication          |
+| Managed Identity   | Authentication without secrets in code  |
+| CDN + Static Web   | Global distribution of frontend assets  |
 
 ---
 
 ## Legend Reference
 
 This diagram generates a legend with:
+
 - **Production** (prod tag) – red
 - **Azure Function** (azure-func tag) – light blue
 - **SQL Database** (azure-sql tag) – light blue
@@ -385,7 +414,7 @@ Use Container_Boundary-first strategy:
 3. Data & Security: Key Vault, SQL Database, Service Bus
 4. Observability: Application Insights
 
-Apply GPW branding (enterprise purple) with prod tags. 
+Apply GPW branding (enterprise purple) with prod tags.
 Include managed identity, security zones, and specific verb labels.
 ```
 

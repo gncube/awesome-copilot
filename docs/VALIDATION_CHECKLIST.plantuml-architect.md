@@ -34,6 +34,7 @@ For each Container_Boundary, System_Boundary, Component_Boundary, or Deployment_
 ```
 
 **Red Flags - REJECT if Present:**
+
 - ❌ Empty boundary with only `Rel(outer_alias, boundary_item, "label")`
 - ❌ Boundary named "Layer" with only data references, no definitions
 - ❌ Nested boundaries with no element definitions at parent level
@@ -45,17 +46,19 @@ For each Container_Boundary, System_Boundary, Component_Boundary, or Deployment_
 - [ ] **PlantUML Tags**
   - [ ] `@startuml` and `@enduml` present and matched
   - [ ] Diagram title or identifier present
-  
 - [ ] **Library Includes**
+
   - [ ] `!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_[TYPE].puml` present
   - [ ] Correct C4 library imported (Context, Container, Component, Dynamic, Deployment, Sequence)
 
 - [ ] **Bracket & Parenthesis Matching**
+
   - [ ] All `{` have matching `}`
   - [ ] All `(` have matching `)`
   - [ ] No trailing commas in parameter lists
 
 - [ ] **Quotes & Escaping**
+
   - [ ] All string parameters wrapped in quotes: `"Label"`
   - [ ] No unescaped special characters in labels
   - [ ] Hex colors in quotes: `$bgColor="#005EB8"`
@@ -70,18 +73,21 @@ For each Container_Boundary, System_Boundary, Component_Boundary, or Deployment_
 ### 🏗️ Architectural Validation Checklist
 
 - [ ] **Element Definitions**
+
   - [ ] Every element has a non-empty label (2nd parameter)
   - [ ] Person, System, Container, Component clearly distinguished
   - [ ] Technology/language specified for compute containers (Node.js, Python, Java, C#)
   - [ ] Database type specified (SQL, NoSQL, Cache, Queue)
 
 - [ ] **Relationships**
+
   - [ ] Every relationship has a descriptive label (NOT generic "uses")
   - [ ] Descriptive verbs used: "queries", "publishes", "authenticates", "transforms", "stores"
   - [ ] Technology/protocol documented where relevant (HTTP, AMQP, SQL/JDBC, gRPC)
   - [ ] Bidirectional relationships (`BiRel()`) used appropriately (not over-used)
 
 - [ ] **Boundary Architecture**
+
   - [ ] Each boundary represents logical architectural tier/zone
   - [ ] Boundary names convey purpose (API Tier, Data Layer, Security Zone)
   - [ ] Elements within boundary are cohesive (don't mix UI + Database in same boundary)
@@ -98,18 +104,21 @@ For each Container_Boundary, System_Boundary, Component_Boundary, or Deployment_
 ### 🎨 Branding & Tag Validation Checklist
 
 - [ ] **Branding Tags Applied**
+
   - [ ] All primary elements tagged with organization brand (nhs, welsh, gpw, custom)
   - [ ] Tag definition present: `AddElementTag("brand", $bgColor="...", ...)`
   - [ ] Consistent branding across all diagram elements
   - [ ] External/3rd-party elements distinguished via `_Ext` variant or different tag
 
 - [ ] **Environment Tags**
+
   - [ ] Production elements tagged: `$tags="prod"`
   - [ ] Staging/Dev environments tagged: `$tags="staging"`, `$tags="dev"`
   - [ ] Deprecated components tagged: `$tags="deprecated"` with removal note
   - [ ] Environment tags meaningful (not all prod or all dev)
 
 - [ ] **Azure Service Tags**
+
   - [ ] Azure services tagged with `azure_*` tags (azure-func, azure-sql, azure-apim, etc.)
   - [ ] Sprite icons applied: `$sprite="azurefunctions"`, `$sprite="azuresqldatabase"`
   - [ ] Azure service tags define sprite and tech info
@@ -124,18 +133,21 @@ For each Container_Boundary, System_Boundary, Component_Boundary, or Deployment_
 ### 📊 Legend & Visualization Checklist
 
 - [ ] **Legend Generation**
+
   - [ ] `SHOW_LEGEND()` or `LAYOUT_WITH_LEGEND()` present
   - [ ] Legend displays all custom tags
   - [ ] Legend is readable (≤15 tags recommended)
   - [ ] Legend text is descriptive (e.g., "Production", "Azure Function", not just tag names)
 
 - [ ] **Color & Contrast**
+
   - [ ] All hex colors valid format: `#RRGGBB`
   - [ ] Text color contrasts with background (4.5:1 WCAG AA minimum)
   - [ ] Branding colors consistent across diagram
   - [ ] External elements visually distinct (different color palette or border)
 
 - [ ] **Sprites & Icons**
+
   - [ ] Sprites referenced exist in included libraries
   - [ ] Sprite scale reasonable (0.5 – 1.5 typical)
   - [ ] Custom sprites inlined or properly sourced
@@ -154,11 +166,13 @@ For each Container_Boundary, System_Boundary, Component_Boundary, or Deployment_
 For multi-level diagrams (Context → Container → Component):
 
 - [ ] **Naming Consistency**
+
   - [ ] Aliases match across diagrams (e.g., `apiSystem` referenced in Context, decomposed in Container)
   - [ ] Element labels consistent (e.g., "User Portal" in Context = "Web Portal" in Container)
   - [ ] Same branding palette applied across all diagrams
 
 - [ ] **Relationship Consistency**
+
   - [ ] Cross-diagram relationships documented (e.g., Container X inside System Y from Context)
   - [ ] No contradictory relationships between levels
   - [ ] External integrations consistent across all diagrams
@@ -175,16 +189,19 @@ For multi-level diagrams (Context → Container → Component):
 Before publishing/presenting the diagram:
 
 - [ ] **Compilation Verified**
+
   - [ ] Diagram renders without PlantUML errors
   - [ ] All elements visible (no hidden/clipped content)
   - [ ] SVG or PNG export clean (no artifacts)
 
 - [ ] **Accessibility**
+
   - [ ] Diagram works in color-blind modes (don't rely on color alone)
   - [ ] Text labels readable at print size (8pt minimum)
   - [ ] High contrast for projected presentations
 
 - [ ] **Documentation**
+
   - [ ] Diagram title/caption provided
   - [ ] Stakeholder audience identified
   - [ ] Assumptions documented (e.g., "assumes v2.0 architecture")
@@ -200,15 +217,15 @@ Before publishing/presenting the diagram:
 
 ## Common Issues & Remediation
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Empty boundaries | Only Rel() calls, no definitions | Add Container() or Component() elements |
-| Orphaned tags | Tag used but not defined | Run `AddElementTag()` before using |
-| Generic relationships | "uses", "talks to" labels | Replace with verbs: "queries", "publishes" |
-| Cluttered legend | Too many custom tags | Consolidate related tags; remove non-essential |
-| Poor contrast | Light text on light background | Use `$fontColor="#000000"` for contrast |
-| Sprite not rendering | Sprite path wrong or library missing | Verify library include; test sprite name |
-| Circular dependencies | Architectural loop without mediation | Add queue/event bus intermediary; explain in docs |
+| Issue                 | Cause                                 | Fix                                                |
+| --------------------- | ------------------------------------- | -------------------------------------------------- |
+| Empty boundaries      | Only Rel() calls, no definitions      | Add Container() or Component() elements            |
+| Orphaned tags         | Tag used but not defined              | Run `AddElementTag()` before using                 |
+| Generic relationships | "uses", "talks to" labels             | Replace with verbs: "queries", "publishes"         |
+| Cluttered legend      | Too many custom tags                  | Consolidate related tags; remove non-essential     |
+| Poor contrast         | Light text on light background        | Use `$fontColor="#000000"` for contrast            |
+| Sprite not rendering  | Sprite path wrong or library missing  | Verify library include; test sprite name           |
+| Circular dependencies | Architectural loop without mediation  | Add queue/event bus intermediary; explain in docs  |
 | Inconsistent branding | Different tags/colors across diagrams | Apply same `AddElementTag()` block to all diagrams |
 
 ---
@@ -216,18 +233,22 @@ Before publishing/presenting the diagram:
 ## Team Best Practices
 
 ### 1. **Establish Diagram Standards**
+
 - Agree on branding palette (NHS, Welsh, GPW, or custom)
 - Define boundary naming convention (e.g., "API Tier", "Data Layer", never just "Layer")
 - Document environment tag usage (prod, staging, dev, deprecated)
 
 ### 2. **Version Control Diagrams**
+
 ```bash
 git add diagrams/
 git commit -m "Add Container diagram for v2.0 architecture"
 ```
 
 ### 3. **Cross-Reference in Documentation**
+
 Link diagrams in architecture decision records (ADRs):
+
 ```markdown
 ## Architecture Decision Record: Microservices Split
 
@@ -235,11 +256,13 @@ See: `diagrams/container-v2.0.puml` for system architecture
 ```
 
 ### 4. **Review Process**
+
 - Architect reviews for design correctness
 - Tech lead reviews for technical accuracy
 - Product owner reviews for business logic alignment
 
 ### 5. **Update Cadence**
+
 - Review diagrams quarterly
 - Update for major architectural changes
 - Mark deprecated components with sunset date

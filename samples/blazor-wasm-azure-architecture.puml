@@ -35,7 +35,7 @@ Container_Boundary(api_boundary, "API Tier - Azure Functions", $tags="gpw") {
     Container(auth_func, "Authentication Function", "Azure Function (HTTP Trigger)", "JWT token generation and validation", $tags="azure-func+prod+managed-identity")
     Container(business_logic, "Business Logic Function", "Azure Function (HTTP Trigger)", "Core domain logic, calculations, transformations", $tags="azure-func+prod+managed-identity")
     Container(async_processor, "Async Processor Function", "Azure Function (Service Bus Trigger)", "Processes long-running tasks, batch operations", $tags="azure-func+prod+managed-identity")
-    
+
     Rel(api_gateway, auth_func, "delegates auth", "HTTP")
     Rel(api_gateway, business_logic, "routes requests", "HTTP")
     Rel(business_logic, async_processor, "publishes to", "AMQP")
