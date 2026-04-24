@@ -8,12 +8,14 @@ Professional architecture diagram generation and enterprise documentation plugin
 
 ### Core Components
 
-| Component                      | Purpose                                                                                |
-| ------------------------------ | -------------------------------------------------------------------------------------- |
-| **PlantUML Architect Agent**   | Expert diagram generation: all C4 types, Azure integration, custom branding            |
-| **Architecture Expert Agents** | Senior architects (High-Level Big Picture, Architecture Design) for strategic planning |
-| **C4 Branding Skill**          | Pre-configured tag libraries for NHS, Welsh Gov, GPW, and custom brands                |
-| **Azure Visualizer Skill**     | Real-time Azure resource topology mapping and visualization                            |
+| Component                      | Purpose                                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------------------- |
+| **PlantUML Architect Agent**   | Self-healing diagram generation: all C4 types, icon font sprites, Azure, custom branding |
+| **Self-Healing Validation**    | 7-test validation engine + auto-repair with golden template fallback (max 2 attempts)    |
+| **Icon Font Sprites**          | Font-Awesome 4/5/6, Devicons, Devicons2, Material, Weather via tupadr3 v3.0.0            |
+| **Architecture Expert Agents** | Senior architects (High-Level Big Picture, Architecture Design) for strategic planning   |
+| **C4 Branding Skill**          | Pre-configured tag libraries for NHS, Welsh Gov, GPW, and custom brands + icon mappings  |
+| **Azure Visualizer Skill**     | Real-time Azure resource topology mapping and visualization                              |
 
 ## 🚀 Quick Start
 
@@ -159,10 +161,49 @@ Rapid prototyping of architectures during design sessions (sketch mode available
 ### PlantUML Architect
 
 - All C4 diagram types (Context, Container, Component, Dynamic, Deployment, Sequence)
+- Icon font sprite macros (FA*, FA5*, FA6*, DEV*, DEV2*, MAT*, GOV*, WE*)
 - Branding system selection or custom color application
 - Azure service icon integration
 - Multi-diagram consistency management
+- **Self-healing validation with auto-repair**
 - Sprite and custom styling
+
+### Self-Healing Validation Engine
+
+The agent includes an automated validation and repair system:
+
+✅ **7-Test Validation Suite**
+
+1. Boundary Integrity – No alias-only references
+2. Single Declaration – Each element declared exactly once
+3. Hierarchy Validity – Correct C4 level (Context/Container/Component)
+4. Relationship Integrity – All relationship targets exist
+5. Legend Integrity – All tags defined, legends present
+6. Sprite Safety – Icon macros are resolvable
+7. Layout Consistency – Proper legend configuration
+
+✅ **Auto-Healing Strategies** (applied automatically)
+
+- Fix A: Boundary Repair – Add missing element definitions
+- Fix B: Container Correction – Fix nesting hierarchy issues
+- Fix C: Duplicate Removal – Remove redeclared aliases
+- Fix D: Missing Tag Definition – Auto-inject tag definitions
+- Fix E: Invalid Sprite – Replace unresolvable icons
+
+✅ **Golden Template Fallback**
+
+- After 2 failed repair attempts, uses battle-tested golden templates
+- Preserves user intent while ensuring compilable output
+- Auto-marked with: `' AUTO-HEALED: 2 attempts, fallback to golden template`
+
+✅ **TDD-Style Self-Tests** (4 internal verifications)
+
+- Does every alias appear exactly once?
+- Are boundaries referencing aliases instead of defining elements?
+- Does this follow correct C4 hierarchy?
+- Will this compile without syntax errors?
+
+**Result**: Every diagram is guaranteed compilable, valid C4, and production-ready.
 
 ### High-Level Big Picture Architect
 

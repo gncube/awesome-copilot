@@ -1,32 +1,39 @@
 ---
 name: "plantuml-c4-branding"
-description: "Reusable PlantUML C4 branding templates, tag libraries, and styling configurations for consistent enterprise diagram generation. Includes NHS, Welsh Government, GPW, and custom brand starter templates."
+description: "Reusable PlantUML C4 branding templates, tag libraries, and styling configurations for self-healing diagram generation. Supports NHS, Welsh Government, GPW, custom brands, and icon font sprites (Font-Awesome, Devicons). Integrates with PlantUML Architect agent."
 ---
 
 # PlantUML C4 Branding & Tag Libraries
 
-A comprehensive skill providing production-ready branding templates and pre-built tag libraries for consistent C4-PlantUML diagram styling across organizational standards.
+A comprehensive skill providing production-ready branding templates, reusable tag libraries, and icon font sprite mappings for consistent, self-healing C4-PlantUML diagram generation across organizational standards.
 
 ## Overview
 
-This skill packages:
+This skill powers the **PlantUML Architect** agent with:
 
 - **Pre-configured branding palettes** (NHS, Welsh, GPW, and custom templates)
+- **Icon font sprite integration** (Font-Awesome 4/5/6, Devicons, Devicons2, Material, Weather via tupadr3 v3.0.0)
+- **Self-healing tag definitions** for automated diagram repair
 - **Reusable tag definitions** for common diagram elements
 - **Azure service icon mappings** with consistent styling
 - **Starter templates** for rapid diagram creation
+- **Production-ready validation patterns** for guaranteed compilable output
 
 ## Available Branding Palettes
 
 ### 1. NHS (National Health Service)
 
 ```plantuml
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 ' NHS Branding - Healthcare Blue
 AddElementTag("nhs", $bgColor="#005EB8", $fontColor="#FFFFFF", $borderColor="#003087")
 AddElementTag("nhs-external", $bgColor="#0078D4", $fontColor="#FFFFFF", $borderColor="#005EB8")
 AddElementTag("nhs-data", $bgColor="#003087", $fontColor="#FFFFFF", $borderColor="#001a47")
+AddElementTag("nhs-prod", $bgColor="#005EB8", $fontColor="#FFFFFF", $borderColor="#003087")
+AddElementTag("nhs-staging", $bgColor="#0078D4", $fontColor="#FFFFFF", $borderColor="#005EB8")
 
 ' NHS Relationships
 AddRelTag("nhs-secure", $lineColor="#005EB8", $textColor="#005EB8", $lineStyle="BoldLine()")
@@ -34,18 +41,23 @@ AddRelTag("nhs-audit", $lineColor="#003087", $textColor="#003087", $lineStyle="D
 ```
 
 **Usage**: Healthcare systems, patient portals, clinical data platforms
+**Icon Support**: FA*, FA5*, FA6*, DEV* (e.g., FA5_SERVER(clinic, "NHS Clinic", "node", $tags="nhs-prod"))
 
 ---
 
 ### 2. Welsh Government (Llywodraeth Cymru)
 
 ```plantuml
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 ' Welsh Digital / Public Sector Green
 AddElementTag("welsh", $bgColor="#007A33", $fontColor="#FFFFFF", $borderColor="#005A24")
 AddElementTag("welsh-external", $bgColor="#009640", $fontColor="#FFFFFF", $borderColor="#007A33")
 AddElementTag("welsh-public", $bgColor="#005A24", $fontColor="#FFFFFF", $borderColor="#003d19")
+AddElementTag("welsh-prod", $bgColor="#007A33", $fontColor="#FFFFFF", $borderColor="#005A24")
+AddElementTag("welsh-staging", $bgColor="#009640", $fontColor="#FFFFFF", $borderColor="#007A33")
 
 ' Welsh Relationships
 AddRelTag("welsh-citizen", $lineColor="#007A33", $textColor="#007A33", $lineStyle="SolidLine()")
@@ -53,18 +65,23 @@ AddRelTag("welsh-integration", $lineColor="#009640", $textColor="#009640", $line
 ```
 
 **Usage**: Public sector services, civic platforms, government integrations
+**Icon Support**: FA*, FA5*, FA6*, GOV* (e.g., FA_BUILDING(council, "Local Authority", "node", $tags="welsh-prod"))
 
 ---
 
 ### 3. GPW (General Purpose Web/Enterprise)
 
 ```plantuml
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 ' GPW Enterprise Purple/Blue
 AddElementTag("gpw", $bgColor="#4F46E5", $fontColor="#FFFFFF", $borderColor="#3730A3")
 AddElementTag("gpw-external", $bgColor="#6366F1", $fontColor="#FFFFFF", $borderColor="#4F46E5")
 AddElementTag("gpw-system", $bgColor="#3730A3", $fontColor="#FFFFFF", $borderColor="#2d2061")
+AddElementTag("gpw-prod", $bgColor="#4F46E5", $fontColor="#FFFFFF", $borderColor="#3730A3")
+AddElementTag("gpw-staging", $bgColor="#818CF8", $fontColor="#FFFFFF", $borderColor="#4F46E5")
 
 ' GPW Relationships
 AddRelTag("gpw-api", $lineColor="#4F46E5", $textColor="#4F46E5", $lineStyle="BoldLine()")
@@ -72,6 +89,7 @@ AddRelTag("gpw-legacy", $lineColor="#3730A3", $textColor="#3730A3", $lineStyle="
 ```
 
 **Usage**: Enterprise applications, SaaS platforms, corporate systems
+**Icon Support**: FA5*, DEV*, DEV2\_ (e.g., FA5_SERVER(api, "API Gateway", "node", $tags="gpw-prod"))
 
 ---
 

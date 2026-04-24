@@ -32,6 +32,20 @@ First, collect comprehensive information about the system:
 - Use `file_search` to locate related technical specifications, ADRs, or existing documentation
 - Use `read_file` to understand existing system context and architectural decisions
 
+## 🎯 Diagram Generation Strategy
+
+**For all C4 diagrams in the AOD, delegate to the PlantUML Architect agent** to ensure production-ready diagrams with guaranteed validation and self-healing capabilities.
+
+**Why**: The PlantUML Architect provides:
+
+- 7-test validation suite (Boundary Integrity, Single Declaration, Hierarchy Validity, Relationship Integrity, Legend Integrity, Sprite Safety, Layout Consistency)
+- Self-healing with up to 2 auto-repair attempts before golden template fallback
+- Professional icon font sprites (Font-Awesome 4/5/6, Devicons, Material via tupadr3 v3.0.0)
+- Consistent branding (NHS, Welsh, GPW, or custom)
+- Accessibility-first approach with proper legends and contrast
+
+**Reference**: [PlantUML Architect Agent](../agents/plantuml-architect.agent.md) | [Validation Checklist](../docs/VALIDATION_CHECKLIST.plantuml-architect.md)
+
 ### 2. Arc42 Structure Generation
 
 Create a complete AOD following this structure:
@@ -60,17 +74,59 @@ Create a complete AOD following this structure:
 - Technology stack details with rationale
 - Component overview and interactions
 
-#### Section 4.1: Component Diagram
+#### Section 4.1: Context Diagram (Request from @plantuml-architect)
 
-- Generate C4 Component diagram using PlantUML
-- Include proper C4-PlantUML syntax with containers, components, and relationships
-- Add clear description of key components and their responsibilities
+Example request:
 
-#### Section 4.2: Sequence Diagrams
+```
+Generate Context diagram for [${input:projectName}] showing:
+- Key actors and user types
+- Primary system boundary
+- External systems and integrations
+- Domain: ${input:domain}
+- Use branding: [NHS/Welsh/GPW/Custom]
+```
 
-- Create PlantUML sequence diagrams for main use cases
-- Include authentication flows, API interactions, and data flows
-- Follow specified security frameworks and integration patterns
+The agent will return a self-healed, production-ready diagram with proper legend and icon sprites.
+
+#### Section 4.2: Container Diagram (Request from @plantuml-architect)
+
+Example request:
+
+```
+Generate Container diagram for [${input:projectName}] with:
+- Containers: ${input:techStack} (specify technologies)
+- Boundaries: Logical groupings and deployment zones
+- External integrations and data flows
+- Compliance indicators: ${input:complianceStandards}
+- Use branding: [NHS/Welsh/GPW/Custom]
+- Icons: Include Font-Awesome and technology-specific sprites
+```
+
+#### Section 4.3: Component Diagram (Request from @plantuml-architect)
+
+Example request:
+
+```
+Generate Component diagram for [critical subsystem] with:
+- Components: Controllers, Services, Repositories
+- Technologies: [specific frameworks and languages]
+- Data flows and interactions
+- Security components highlighted: ${input:securityFrameworks}
+- Use branding: [NHS/Welsh/GPW/Custom]
+```
+
+#### Section 4.4: Sequence Diagrams (Request from @plantuml-architect)
+
+For key scenarios (authentication, API interaction, data flow):
+
+```
+Generate Sequence diagram for [use case] showing:
+- Actors and systems involved
+- Sequence of interactions
+- Security checks and validations (${input:securityFrameworks})
+- Error handling and edge cases
+```
 
 #### Section 5: Risks & Technical Debt
 
@@ -185,6 +241,28 @@ Rel(repository, db, "[CRUD operations]")
 @enduml
 ```
 
+### 3.5 Diagram Validation Checklist
+
+Before embedding any C4 diagram in the AOD, verify against the **7 Pre-Flight Validation Tests**:
+
+- [ ] **Test 1: Boundary Integrity** – No empty boundaries; all contain substantive elements
+- [ ] **Test 2: Single Declaration** – Each alias appears exactly once
+- [ ] **Test 3: Hierarchy Validity** – Correct C4 level (Context/Container/Component)
+- [ ] **Test 4: Relationship Integrity** – All relationship targets exist and are declared
+- [ ] **Test 5: Legend Integrity** – All tags are defined via AddElementTag()
+- [ ] **Test 6: Sprite Safety** – All icon macros and sprites are resolvable
+- [ ] **Test 7: Layout Consistency** – Legend present when custom tags are used
+
+**Post-Generation Requirements**:
+
+- Diagram renders without PlantUML errors
+- All elements visible (no clipping)
+- SVG/PNG export clean
+- Color contrast meets WCAG 4.5:1 minimum
+- Branding consistent with organizational standards
+
+**Reference**: [Complete Validation Checklist](../docs/VALIDATION_CHECKLIST.plantuml-architect.md) with detailed explanations and examples.
+
 ### 4. Security Integration
 
 Ensure all architectural decisions follow secure-by-design principles:
@@ -193,6 +271,7 @@ Ensure all architectural decisions follow secure-by-design principles:
 - Include security headers, encryption, and authentication patterns
 - Document data classification and protection measures
 - Reference specified compliance standards and security requirements
+- For security diagrams, request from @plantuml-architect with security component highlighting
 
 ### 5. Quality Assurance
 
@@ -249,11 +328,53 @@ The generated AOD must:
 - Provide actionable risk mitigation strategies
 - Use professional, clear language suitable for diverse stakeholders
 
+## Tools & Workflow
+
+**For Document Structure**:
+
+- `semantic_search`: Find similar architectural patterns in workspace
+- `file_search`: Locate ADRs, requirements, existing docs
+- `read_file`: Understand system context and decisions
+
+**For Diagram Generation** (RECOMMENDED APPROACH):
+
+- **Delegate ALL C4 diagrams to @plantuml-architect agent**
+- Specify diagram type, system components, boundaries, branding
+- Agent handles validation, self-healing, icon integration automatically
+- NOT RECOMMENDED: Manual PlantUML syntax – use @plantuml-architect instead
+- NOT RECOMMENDED: Manual diagram validation – the agent's 7-test suite handles this
+
+**For Content Integration**:
+
+- `editFiles`: Embed diagrams and generate AOD markdown file
+
+## Supporting Resources
+
+- **PlantUML Architect Agent**: [agents/plantuml-architect.agent.md](../agents/plantuml-architect.agent.md)
+
+  - Self-healing validation engine, 5-step pipeline, golden templates
+
+- **PlantUML C4 Branding Skill**: [skills/plantuml-c4-branding/SKILL.md](../skills/plantuml-c4-branding/SKILL.md)
+
+  - NHS, Welsh, GPW, and custom branding templates with icon sprites
+
+- **Validation Checklist**: [docs/VALIDATION_CHECKLIST.plantuml-architect.md](../docs/VALIDATION_CHECKLIST.plantuml-architect.md)
+
+  - 7-test validation suite, 4 TDD self-tests, 15-item pre-flight checklist
+
+- **Icon Sprite Library**: [tupadr3 v3.0.0](https://github.com/tupadr3/plantuml-icon-font-sprites)
+
+  - 8 icon sets: FA*, FA5*, FA6*, DEV*, DEV2*, MAT*, GOV*, WE*
+
+- **Plugin**: [plantuml-architecture-studio](../plugins/plantuml-architecture-studio/)
+  - Complete integration of agent + skill + validation documentation
+
 ## Notes
 
 - Always include security considerations following specified security frameworks
+- Delegate diagram generation to @plantuml-architect for guaranteed production-ready output
 - Reference industry standards and organizational target architecture where applicable
-- Ensure diagrams are accessible with proper alt text descriptions
+- Ensure AOD is accessible with proper alt text for all embedded diagrams
 - Include realistic quality scenarios with measurable targets
 - Provide clear roadmap aligned with domain-specific transformation goals
 - Follow natural writing style avoiding AI-generated language patterns
