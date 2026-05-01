@@ -1,0 +1,84 @@
+@startuml Complex-Icon-Sprites-Example
+' ============================================================
+' Complex Icon Sprites Example
+' Following tupadr3/plantuml-icon-font-sprites pattern
+' Demonstrates nested icon containers and relationships
+' ============================================================
+
+skinparam defaultTextAlignment center
+
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
+!include $ICONURL/font-awesome-5/server.puml
+!include $ICONURL/font-awesome-6/gitlab.puml
+!include $ICONURL/font-awesome/gears.puml
+!include $ICONURL/font-awesome/fire.puml
+!include $ICONURL/font-awesome/clock_o.puml
+!include $ICONURL/font-awesome/lock.puml
+!include $ICONURL/font-awesome/cloud.puml
+!include $ICONURL/devicons/nginx.puml
+!include $ICONURL/devicons/mysql.puml
+!include $ICONURL/devicons/redis.puml
+!include $ICONURL/devicons2/docker.puml
+!include $ICONURL/devicons/linux.puml
+
+' ----------------------------------------------------------
+' Nested Icon Elements
+' Icon macros can contain other macros using braces {}
+' ----------------------------------------------------------
+
+' External Internet Cloud
+FA_CLOUD(internet, internet, cloud) #White {
+
+}
+
+' Linux Host Container
+DEV_LINUX(debian, Linux, node) #White {
+
+    ' Services on Linux
+    FA_CLOCK_O(crond, crond) #White
+    FA_FIRE(iptables, iptables) #White
+
+    ' Docker Container inside Linux
+    DEV2_DOCKER(docker, docker, node) #White {
+
+        ' Services inside Docker
+        DEV_NGINX(nginx, nginx, node) #White
+        DEV_MYSQL(mysql, mysql, node) #White
+        DEV_REDIS(redis, redis, node) #White
+
+        ' Application Servers
+        FA5_SERVER(nexus, nexus3, node) #White
+        FA6_GITLAB(gitlab, gitlab, node) #White
+        FA_GEARS(gitlabci, gitlab-ci-runner, node) #White
+
+        ' Security
+        FA_LOCK(letsencrypt, letsencrypt-client, node) #White
+    }
+}
+
+' ----------------------------------------------------------
+' Relationships / Communication Flows
+' ----------------------------------------------------------
+
+' Internet to Firewall
+internet ..> iptables : http
+
+' Firewall to Web Server
+iptables ..> nginx : http
+
+' Web Server to Application Servers
+nginx ..> nexus : http
+nginx ..> gitlab : http
+
+' GitLab CI Pipeline
+gitlabci ..> gitlab : http
+
+' Application to Databases
+gitlab ..> mysql : tcp/ip
+gitlab ..> redis : tcp/ip
+
+' Cron Job to Let's Encrypt
+crond --> letsencrypt : starts every month
+
+@enduml

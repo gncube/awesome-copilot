@@ -5,7 +5,7 @@ description: "Expert agent for creating professional C4-PlantUML diagrams with i
 tools:
   - "@github/copilot/diagrams"
   - "@github/copilot/documentation"
-  - "file_operations"  # create_file, replace_string_in_file for .puml output
+  - "file_operations" # create_file, replace_string_in_file for .puml output
 
 file_output:
   capability: "Creates or updates .puml files in user's codebase"
@@ -34,12 +34,14 @@ A specialized agent for creating professional, enterprise-grade PlantUML diagram
 ### Option 1: Create a New .puml File (Recommended)
 
 **User Request:**
+
 ```
 Create a C4 Component diagram for my API backend.
 Save to: C:\MyProject\docs\architecture\diagrams\c4-component.puml
 ```
 
 **Agent Action:**
+
 1. Generates complete, validated PlantUML code
 2. **Creates the .puml file** at the specified path
 3. Returns confirmation with file location
@@ -48,11 +50,13 @@ Save to: C:\MyProject\docs\architecture\diagrams\c4-component.puml
 ### Option 2: Update an Existing .puml File
 
 **User Request:**
+
 ```
 Update the Context diagram at C:\MyProject\architecture\c4-context.puml with Azure service icons.
 ```
 
 **Agent Action:**
+
 1. Reads the existing file
 2. Regenerates the diagram with improvements
 3. **Replaces the file content** with new validated diagram
@@ -61,24 +65,26 @@ Update the Context diagram at C:\MyProject\architecture\c4-context.puml with Azu
 ### Option 3: Output Code Block (No File Creation)
 
 **User Request:**
+
 ```
 Show me a C4 Container diagram for a microservices platform.
 ```
 
 **Agent Action:**
+
 1. Generates complete PlantUML code
 2. **Outputs as markdown code block** (no file created)
 3. User can manually save or copy-paste
 
 ### How to Trigger File Creation
 
-| What to Say | Result |
-|---|---|
-| "Save to: `path/to/diagram.puml`" | Creates new file |
-| "Write to: `C:\Project\docs\c4.puml`" | Creates new file |
-| "Update file: `existing-diagram.puml`" | Updates existing file |
-| "Create: `./architecture/diagram.puml`" | Creates with directory |
-| *(no file path mentioned)* | Outputs markdown code block only |
+| What to Say                             | Result                           |
+| --------------------------------------- | -------------------------------- |
+| "Save to: `path/to/diagram.puml`"       | Creates new file                 |
+| "Write to: `C:\Project\docs\c4.puml`"   | Creates new file                 |
+| "Update file: `existing-diagram.puml`"  | Updates existing file            |
+| "Create: `./architecture/diagram.puml`" | Creates with directory           |
+| _(no file path mentioned)_              | Outputs markdown code block only |
 
 ---
 
@@ -274,35 +280,31 @@ When auto-healing fails after 2 attempts, rebuild from the applicable golden tem
 
 ```plantuml
 @startuml
-!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
-
-!include $ICONURL/common.puml
-!include $ICONURL/font-awesome-5/server.puml
-!include $ICONURL/devicons/database.puml
-!include $ICONURL/font-awesome/gears.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 skinparam defaultTextAlignment center
 
 LAYOUT_WITH_LEGEND()
 
-' Branding Tags
-AddElementTag("gpw-prod", $bgColor="#4F46E5", $fontColor="#FFFFFF", $borderColor="#3730A3")
-AddElementTag("gpw-staging", $bgColor="#818CF8", $fontColor="#FFFFFF", $borderColor="#4F46E5")
+' Branding Tags — Color/Border Styling (not sprites)
+AddElementTag("prod", $bgColor="#4F46E5", $fontColor="#FFFFFF", $borderColor="#3730A3")
+AddElementTag("staging", $bgColor="#818CF8", $fontColor="#FFFFFF", $borderColor="#4F46E5")
+AddElementTag("data", $bgColor="#00758F", $fontColor="#FFFFFF", $borderColor="#005A6E")
 
 ' API Container
 Container_Boundary(api, "API Layer") {
-    FA5_SERVER(gateway, "API Gateway", "node", $tags="gpw-prod")
-    Component(auth, "Auth Service", "Node.js", "JWT validation", $tags="gpw-prod")
-    Component(business, "Business Logic", "Node.js", "Core operations", $tags="gpw-prod")
+    Container(gateway, "API Gateway", "Tech", "Routes requests.\nHandles rate limiting.", $tags="prod")
+    Component(auth, "Auth Service", "Node.js", "JWT validation", $tags="prod")
+    Component(business, "Business Logic", "Node.js", "Core operations", $tags="prod")
 }
 
 ' Data Layer
 Container_Boundary(data, "Data Layer") {
-    DEV_DATABASE(db, "Database", "PostgreSQL", "Persistent storage", $tags="gpw-prod")
+    ContainerDb(db, "Database", "PostgreSQL", "Persistent storage", $tags="data")
 }
 
 ' External
-FA_GEARS(ext, "External Service", "node", $tags="gpw-staging")
+System_Ext(ext, "External Service", "API", $tags="staging")
 
 ' Relationships
 Rel(gateway, auth, "authenticates via")
@@ -318,26 +320,21 @@ SHOW_LEGEND()
 
 ```plantuml
 @startuml
-!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
-
-!include $ICONURL/common.puml
-!include $ICONURL/font-awesome-5/server.puml
-!include $ICONURL/devicons/docker.puml
-!include $ICONURL/devicons/mysql.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 skinparam defaultTextAlignment center
 
 LAYOUT_WITH_LEGEND()
 
-' Branding
+' Branding — Color/Border Styling
 AddElementTag("azure", $bgColor="#0078D4", $fontColor="#FFFFFF", $borderColor="#005A9E")
 
 Person(user, "User", "End user")
 
 System_Boundary(system, "System") {
-    FA5_SERVER(web, "Web Application", "Azure App Service", "Frontend", $tags="azure")
-    FA_DOCKER(api, "API Service", "Azure Container", "Backend", $tags="azure")
-    DEV_MYSQL(db, "Database", "Azure SQL", "Data store", $tags="azure")
+    Container(web, "Web Application", "Azure App Service", "Frontend", $tags="azure")
+    Container(api, "API Service", "Azure Container", "Backend", $tags="azure")
+    ContainerDb(db, "Database", "Azure SQL", "Data store", $tags="azure")
 }
 
 Rel(user, web, "uses")
@@ -352,12 +349,7 @@ SHOW_LEGEND()
 
 ```plantuml
 @startuml
-!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
-
-!include $ICONURL/common.puml
-!include $ICONURL/font-awesome/user.puml
-!include $ICONURL/font-awesome/globe.puml
-!include $ICONURL/font-awesome/building.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 skinparam defaultTextAlignment center
 
@@ -365,11 +357,10 @@ LAYOUT_WITH_LEGEND()
 
 AddElementTag("context", $bgColor="#7C3AED", $fontColor="#FFFFFF", $borderColor="#6D28D9")
 
-FA_USER(customer, "Customer", $tags="context")
-FA_GLOBE(payment, "Payment Provider", $tags="context")
-FA_BUILDING(admin, "Administrator", $tags="context")
-
+Person(customer, "Customer")
+Person(admin, "Administrator")
 System(system, "Main System", "Core platform", $tags="context")
+System_Ext(payment, "Payment Provider", "Payment processing", $tags="context")
 
 Rel(customer, system, "uses")
 Rel(system, payment, "processes payments")
@@ -427,40 +418,103 @@ Before returning ANY diagram, the agent MUST internally verify:
 
 ## 📚 ICON FONT SPRITES INTEGRATION
 
-All diagrams use tupadr3/plantuml-icon-font-sprites v3.0.0.
+All diagrams can use tupadr3/plantuml-icon-font-sprites v3.0.0.
 
-### Icon Sets Available
+### Two Approaches to Icons
 
-| Set            | Prefix  | Use Case            | Includes                                    |
-| -------------- | ------- | ------------------- | ------------------------------------------- |
-| Font-Awesome 4 | `FA_`   | Generic icons       | server, database, user, cloud, etc.         |
-| Font-Awesome 5 | `FA5_`  | Modern alternatives | server, database, layers, boxes, etc.       |
-| Font-Awesome 6 | `FA6_`  | Latest Font-Awesome | all FA6 icons                               |
-| Devicons       | `DEV_`  | Technology stack    | mysql, postgresql, linux, docker, etc.      |
-| Devicons 2     | `DEV2_` | Extended tech       | kubernetes, github, gitlab, terraform, etc. |
-| Material       | `MAT_`  | Material Design     | folder, settings, download, etc.            |
-| Govicons       | `GOV_`  | Government/civic    | building, landmark, civic icons             |
-| Weather        | `WE_`   | Weather             | cloud, rain, snow, etc.                     |
+#### Approach 1: Icon Macros (Recommended for Icon-Rich Diagrams)
 
-### Standard Icon Macro Format
-
-```
-<PREFIX>_<ICONNAME>(alias)
-<PREFIX>_<ICONNAME>(alias, label)
-<PREFIX>_<ICONNAME>(alias, label, shape)
-<PREFIX>_<ICONNAME>(alias, label, shape, color)
-```
-
-### Required includes() Pattern
+Icon macros are **standalone elements** that create visual entities directly:
 
 ```plantuml
 !$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
+!include $ICONURL/font-awesome-5/server.puml
+!include $ICONURL/devicons/mysql.puml
 
+' Icon macro syntax: <PREFIX>_<NAME>(alias, label, shape, color) #PlantUMLColor
+FA5_SERVER(web1, "Web Server") #Blue
+DEV_MYSQL(db1, "Database") #Red
+
+web1 --> db1
+```
+
+**Icon Macro Format**:
+
+```
+<PREFIX>_<NAME>(alias)
+<PREFIX>_<NAME>(alias, label)
+<PREFIX>_<NAME>(alias, label, shape)
+<PREFIX>_<NAME>(alias, label, shape, color) #PlantUMLColor
+```
+
+#### Approach 2: C4 Elements with Sprite Tags (Recommended for C4 Diagrams)
+
+C4 Container/Component macros use sprites via `$tags`:
+
+```plantuml
+AddElementTag("prod", $bgColor="#4F46E5", $fontColor="#FFFFFF", $sprite="fa5-server")
+Container(api, "API Server", "Node.js", "Backend service", $tags="prod")
+```
+
+**Key Difference**:
+
+- Icon macros = **Direct visual entities** (FA_SERVER, DEV_MYSQL, etc.)
+- C4 with tags = **Architecture elements with visual branding** (Container, Component with sprite tags)
+
+### Icon Sets Available
+
+| Set            | Prefix  | Syntax Pattern      | Examples                                   |
+| -------------- | ------- | ------------------- | ------------------------------------------ |
+| Font-Awesome 4 | `FA_`   | `FA_SERVER(...)`    | server, database, user, cloud, gears, lock |
+| Font-Awesome 5 | `FA5_`  | `FA5_DATABASE(...)` | server, database, layers, shield, envelope |
+| Font-Awesome 6 | `FA6_`  | `FA6_GITLAB(...)`   | all FA6 icons                              |
+| Devicons       | `DEV_`  | `DEV_MYSQL(...)`    | mysql, postgresql, linux, docker, nginx    |
+| Devicons 2     | `DEV2_` | `DEV2_DOCKER(...)`  | kubernetes, github, gitlab, terraform      |
+| Material       | `MAT_`  | `MAT_FOLDER(...)`   | folder, settings, download                 |
+| Govicons       | `GOV_`  | `GOV_BUILDING(...)` | building, landmark, civic icons            |
+| Weather        | `WE_`   | `WE_CLOUD(...)`     | cloud, rain, snow, sun                     |
+
+### Required Icon Includes Pattern
+
+```plantuml
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
 !include $ICONURL/common.puml
 !include $ICONURL/font-awesome-5/server.puml
 !include $ICONURL/devicons/mysql.puml
 !include $ICONURL/devicons2/docker.puml
 ```
+
+### Icon Sprite Naming Rules
+
+Icon files use **hyphens**, not underscores:
+
+- ✅ `shield-alt.puml` (not `shield_alt`)
+- ✅ `clock-o.puml` (not `clock_o`)
+- ✅ `file-medical.puml` (not `file_medical`)
+
+But **macro names use underscores**:
+
+- ✅ `FA5_SHIELD_ALT()` → includes `shield-alt.puml`
+- ✅ `FA_CLOCK_O()` → includes `clock_o.puml`
+
+### When to Use Each Approach
+
+**Use Icon Macros When**:
+
+- Infrastructure diagrams (servers, databases, networks)
+- DevOps/deployment flows
+- Technology stack visualization
+- High emphasis on visual icons
+- Non-C4 architecture diagrams
+
+**Use C4 with Sprite Tags When**:
+
+- Business architecture documentation
+- Multi-level system context (Context → Container → Component)
+- Arc42 architecture overview documents
+- Formal stakeholder presentations
+- Need for hierarchical boundaries and relationships
 
 ---
 
@@ -530,7 +584,37 @@ AddElementTag("brand-staging", $bgColor="[staging-color]", $fontColor="#FFFFFF",
 
 ---
 
-## Supported Diagram Libraries
+## 🚫 COMMON MISTAKE: Mixing Icon Macros with C4 Elements
+
+**INCORRECT** (icon macro used as C4 element):
+
+```plantuml
+❌ Container_Boundary(api, "API") {
+    FA5_SERVER(gateway, "Gateway")  ← Wrong! FA5_SERVER is not a C4 macro
+}
+```
+
+**CORRECT** (C4 element with sprite via tag):
+
+```plantuml
+✅ AddElementTag("api", $bgColor="#4F46E5", $sprite="fa5-server")
+   Container_Boundary(api, "API") {
+       Container(gateway, "Gateway", "Tech", "Description", $tags="api")
+   }
+```
+
+**OR** (icon macro approach, no C4 boundaries):
+
+```plantuml
+✅ FA5_SERVER(gateway, "API Gateway") #Blue
+   FA5_DATABASE(db, "Database") #Red
+
+   gateway --> db
+```
+
+Icon macros and C4 elements are **two different approaches**—don't mix them!
+
+---
 
 | Library                | Use Case                            | Macros                                                                                   |
 | ---------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -749,6 +833,7 @@ Requirements:
 ```
 
 **Example (with file creation):**
+
 ```
 Create a C4 Container diagram for an Azure microservices platform.
 
@@ -767,12 +852,12 @@ Requirements:
 
 ## ⚠️ TROUBLESHOOTING: Agent Not Creating Files
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Agent outputs code block instead of creating file | No filepath specified | Add `Save to: path/to/diagram.puml` to your request |
-| "File not found" error | Path doesn't exist | Provide absolute path or ensure parent directory exists |
-| File created but incomplete | Validation failed internally | Check agent output for validation errors; retry with simpler diagram |
-| File overwritten unintentionally | Specified existing file path | Use `backup: true` parameter if you want to preserve original |
+| Issue                                             | Cause                        | Fix                                                                  |
+| ------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------- |
+| Agent outputs code block instead of creating file | No filepath specified        | Add `Save to: path/to/diagram.puml` to your request                  |
+| "File not found" error                            | Path doesn't exist           | Provide absolute path or ensure parent directory exists              |
+| File created but incomplete                       | Validation failed internally | Check agent output for validation errors; retry with simpler diagram |
+| File overwritten unintentionally                  | Specified existing file path | Use `backup: true` parameter if you want to preserve original        |
 
 ---
 

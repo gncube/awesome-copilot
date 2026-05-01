@@ -1,0 +1,96 @@
+@startuml Microservices-Icon-Sprites-Example
+' ============================================================
+' Microservices Platform with Icon Sprites
+' Following tupadr3/plantuml-icon-font-sprites pattern
+' Demonstrates nested architecture with icon macros
+' ============================================================
+
+skinparam defaultTextAlignment center
+
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
+!include $ICONURL/font-awesome-5/user.puml
+!include $ICONURL/font-awesome-5/desktop.puml
+!include $ICONURL/font-awesome-5/exchange_alt.puml
+!include $ICONURL/font-awesome-5/shield_alt.puml
+!include $ICONURL/font-awesome-5/shopping_cart.puml
+!include $ICONURL/font-awesome-5/boxes.puml
+!include $ICONURL/font-awesome-5/envelope.puml
+!include $ICONURL/font-awesome-5/database.puml
+!include $ICONURL/font-awesome-5/comments.puml
+!include $ICONURL/devicons/redis.puml
+!include $ICONURL/devicons/mysql.puml
+!include $ICONURL/font-awesome/cube.puml
+
+' ----------------------------------------------------------
+' External Internet / End User
+' ----------------------------------------------------------
+FA5_USER(endUser, "End User", node) #Gray
+
+' ----------------------------------------------------------
+' Microservices Platform Container
+' ----------------------------------------------------------
+FA_CUBE(platform, "Microservices Platform", node) #Purple {
+
+    ' Frontend Layer
+    FA5_DESKTOP(webApp, "Web Application", node) #Blue
+
+    ' API Gateway Layer
+    FA5_EXCHANGE_ALT(gateway, "API Gateway", node) #Indigo
+
+    ' Microservices Layer
+    FA5_BOXES(services, "Microservices", node) #Green {
+        FA5_SHIELD_ALT(authService, "Auth Service", node) #Red
+        FA5_SHOPPING_CART(orderService, "Order Service", node) #Orange
+        FA5_BOXES(inventoryService, "Inventory Service", node) #YellowGreen
+        FA5_ENVELOPE(notificationService, "Notification Service", node) #Cyan
+    }
+
+    ' Data & Cache Layer
+    FA5_DATABASE(dataLayer, "Data & Cache", node) #DarkGreen {
+        DEV_MYSQL(primaryDb, "SQL Database", node) #DarkGreen
+        DEV_REDIS(cache, "Redis Cache", node) #Red
+    }
+
+    ' Message Queue
+    FA5_COMMENTS(messageQueue, "Message Queue", node) #Orange
+}
+
+' ----------------------------------------------------------
+' External Systems
+' ----------------------------------------------------------
+FA5_SHIELD_ALT(entraId, "Entra ID", node) #Blue
+FA5_ENVELOPE(sendgrid, "SendGrid", node) #Red
+
+' ----------------------------------------------------------
+' Relationships / Communication Flows
+' ----------------------------------------------------------
+
+' User to Frontend
+endUser --> webApp : browses
+
+' Frontend to Gateway
+webApp --> gateway : calls API
+
+' Gateway to Microservices
+gateway --> authService : routes auth
+gateway --> orderService : routes orders
+gateway --> inventoryService : routes inventory
+
+' Inter-Service Communication
+orderService ..> inventoryService : queries stock
+orderService --> messageQueue : publishes events
+notificationService --> messageQueue : subscribes
+
+' Data Access
+authService --> primaryDb : reads/writes
+orderService --> primaryDb : reads/writes
+inventoryService --> primaryDb : reads/writes
+orderService --> cache : caches data
+inventoryService --> cache : caches data
+
+' External Integrations
+authService --> entraId : validates tokens
+notificationService --> sendgrid : sends emails
+
+@enduml
