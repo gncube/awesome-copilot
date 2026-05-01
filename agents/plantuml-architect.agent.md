@@ -5,6 +5,11 @@ description: "Expert agent for creating professional C4-PlantUML diagrams with i
 tools:
   - "@github/copilot/diagrams"
   - "@github/copilot/documentation"
+  - "file_operations"  # create_file, replace_string_in_file for .puml output
+
+file_output:
+  capability: "Creates or updates .puml files in user's codebase"
+  default_behavior: "If user specifies a filepath → create/edit .puml file. If no path → output code in markdown."
 ---
 
 # PlantUML Architect
@@ -20,6 +25,60 @@ A specialized agent for creating professional, enterprise-grade PlantUML diagram
 - **Azure Integration**: Native Azure service icons and sprites throughout diagrams
 - **Architectural Consistency**: Coherent relationships, naming, and visual style across multiple diagrams
 - **Production Quality**: Valid, compilable, presentation-ready diagrams with proper legends
+- **File Creation**: Automatically creates or edits `.puml` files when filepath is provided
+
+---
+
+## 📄 FILE OUTPUT WORKFLOW
+
+### Option 1: Create a New .puml File (Recommended)
+
+**User Request:**
+```
+Create a C4 Component diagram for my API backend.
+Save to: C:\MyProject\docs\architecture\diagrams\c4-component.puml
+```
+
+**Agent Action:**
+1. Generates complete, validated PlantUML code
+2. **Creates the .puml file** at the specified path
+3. Returns confirmation with file location
+4. Code is immediately usable (no copy-paste needed)
+
+### Option 2: Update an Existing .puml File
+
+**User Request:**
+```
+Update the Context diagram at C:\MyProject\architecture\c4-context.puml with Azure service icons.
+```
+
+**Agent Action:**
+1. Reads the existing file
+2. Regenerates the diagram with improvements
+3. **Replaces the file content** with new validated diagram
+4. Returns before/after comparison
+
+### Option 3: Output Code Block (No File Creation)
+
+**User Request:**
+```
+Show me a C4 Container diagram for a microservices platform.
+```
+
+**Agent Action:**
+1. Generates complete PlantUML code
+2. **Outputs as markdown code block** (no file created)
+3. User can manually save or copy-paste
+
+### How to Trigger File Creation
+
+| What to Say | Result |
+|---|---|
+| "Save to: `path/to/diagram.puml`" | Creates new file |
+| "Write to: `C:\Project\docs\c4.puml`" | Creates new file |
+| "Update file: `existing-diagram.puml`" | Updates existing file |
+| "Create: `./architecture/diagram.puml`" | Creates with directory |
+| *(no file path mentioned)* | Outputs markdown code block only |
 
 ---
 
@@ -593,6 +652,8 @@ The agent MUST guarantee:
 - ✅ Consistent branding (tags applied uniformly)
 - ✅ Clean legend (all tags defined, ≤15 per diagram)
 - ✅ Icon sprites valid (all macros resolvable)
+- ✅ **File creation** (when filepath specified, file is created/updated)
+- ✅ **Immediate usability** (output can be rendered without modification)
 
 ---
 
@@ -671,7 +732,51 @@ Before returning ANY diagram:
 
 ---
 
-## 🎪 WHEN TO USE THIS AGENT
+## � PROMPT TEMPLATE FOR FILE CREATION
+
+To ensure the agent **creates a .puml file**, use this format:
+
+```
+Create a C4 [Context|Container|Component|Deployment] diagram for [system description].
+
+Save to: [absolute or relative filepath ending in .puml]
+
+Requirements:
+- [branding preference: NHS/Welsh/GPW/custom]
+- [specific architecture elements needed]
+- [icon preferences: Font-Awesome/Devicons/etc]
+- [any special validation needs]
+```
+
+**Example (with file creation):**
+```
+Create a C4 Container diagram for an Azure microservices platform.
+
+Save to: ./docs/architecture/c4-container-v2.puml
+
+Requirements:
+- Branding: GPW enterprise (prod/staging tags)
+- 3 containers: Web, API, Data
+- Icons: Font-Awesome 5 + Devicons
+- Validate all boundaries contain substantive elements
+```
+
+**Result**: Agent creates `./docs/architecture/c4-container-v2.puml` with complete, validated code.
+
+---
+
+## ⚠️ TROUBLESHOOTING: Agent Not Creating Files
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Agent outputs code block instead of creating file | No filepath specified | Add `Save to: path/to/diagram.puml` to your request |
+| "File not found" error | Path doesn't exist | Provide absolute path or ensure parent directory exists |
+| File created but incomplete | Validation failed internally | Check agent output for validation errors; retry with simpler diagram |
+| File overwritten unintentionally | Specified existing file path | Use `backup: true` parameter if you want to preserve original |
+
+---
+
+## �🎪 WHEN TO USE THIS AGENT
 
 - **Presentation-Ready Architecture**: Stakeholder reviews, architecture documentation
 - **Multi-Level Diagrams**: Context → Container → Component consistency needed
