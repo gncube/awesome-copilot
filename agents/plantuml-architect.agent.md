@@ -429,12 +429,12 @@ Icon macros are **standalone elements** that create visual entities directly:
 ```plantuml
 !$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
 !include $ICONURL/common.puml
-!include $ICONURL/font-awesome-5/server.puml
-!include $ICONURL/devicons/mysql.puml
+!include $ICONURL/font-awesome-5/database.puml
+!include $ICONURL/devicons/postgresql.puml
 
 ' Icon macro syntax: <PREFIX>_<NAME>(alias, label, shape, color) #PlantUMLColor
-FA5_SERVER(web1, "Web Server") #Blue
-DEV_MYSQL(db1, "Database") #Red
+FA5_DATABASE(web1, "Web Server", "node") #Blue
+DEV_POSTGRESQL(db1, "Database", "node") #Red
 
 web1 --> db1
 ```
@@ -448,19 +448,19 @@ web1 --> db1
 <PREFIX>_<NAME>(alias, label, shape, color) #PlantUMLColor
 ```
 
-#### Approach 2: C4 Elements with Sprite Tags (Recommended for C4 Diagrams)
+#### Approach 2: C4 Elements with Color/Border Tags (Recommended for C4 Diagrams)
 
-C4 Container/Component macros use sprites via `$tags`:
+C4 Container/Component macros use color and border styling via `AddElementTag`:
 
 ```plantuml
-AddElementTag("prod", $bgColor="#4F46E5", $fontColor="#FFFFFF", $sprite="fa5-server")
+AddElementTag("prod", $bgColor="#4F46E5", $fontColor="#FFFFFF", $borderColor="#3730A3")
 Container(api, "API Server", "Node.js", "Backend service", $tags="prod")
 ```
 
 **Key Difference**:
 
-- Icon macros = **Direct visual entities** (FA_SERVER, DEV_MYSQL, etc.)
-- C4 with tags = **Architecture elements with visual branding** (Container, Component with sprite tags)
+- Icon macros = **Direct visual entities** (FA5_DATABASE, DEV_POSTGRESQL, etc.) with colors applied directly
+- C4 with tags = **Architecture elements with semantic styling** (Container, Component with color/border tags, NO sprite parameters)
 
 ### Icon Sets Available
 
@@ -477,26 +477,66 @@ Container(api, "API Server", "Node.js", "Backend service", $tags="prod")
 
 ### Required Icon Includes Pattern
 
+Always use verified icon paths from tupadr3 v3.0.0:
+
 ```plantuml
 !$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
 !include $ICONURL/common.puml
-!include $ICONURL/font-awesome-5/server.puml
-!include $ICONURL/devicons/mysql.puml
-!include $ICONURL/devicons2/docker.puml
+!include $ICONURL/font-awesome-5/mobile_alt.puml
+!include $ICONURL/font-awesome-5/database.puml
+!include $ICONURL/devicons/postgresql.puml
+!include $ICONURL/devicons/redis.puml
+
+' Now use the verified macros:
+FA5_MOBILE_ALT(mobile, "Mobile App", "node") #Purple
+FA5_DATABASE(web, "API", "node") #Blue
+DEV_POSTGRESQL(mainDb, "PostgreSQL", "node") #DarkGreen
+DEV_REDIS(cache, "Redis", "node") #Red
 ```
+
+**Icon paths must use underscores and match exact filenames** in the repository.
 
 ### Icon Sprite Naming Rules
 
-Icon files use **hyphens**, not underscores:
+**Icon include files use UNDERSCORES** in the tupadr3 v3.0.0 repository:
 
-- ✅ `shield-alt.puml` (not `shield_alt`)
-- ✅ `clock-o.puml` (not `clock_o`)
-- ✅ `file-medical.puml` (not `file_medical`)
+- ✅ `shield_alt.puml` (underscore in filename)
+- ✅ `shopping_cart.puml` (underscore in filename)
+- ✅ `exchange_alt.puml` (underscore in filename)
+- ✅ `mobile_alt.puml` (underscore in filename)
 
-But **macro names use underscores**:
+**Macro names use UNDERSCORES** to match the icon file convention:
 
-- ✅ `FA5_SHIELD_ALT()` → includes `shield-alt.puml`
+- ✅ `FA5_SHIELD_ALT()` → includes `shield_alt.puml`
+- ✅ `FA5_SHOPPING_CART()` → includes `shopping_cart.puml`
 - ✅ `FA_CLOCK_O()` → includes `clock_o.puml`
+
+### Icon Verification Checklist
+
+Before using an icon in your diagram, **verify it exists** in tupadr3 v3.0.0:
+
+```
+https://github.com/tupadr3/plantuml-icon-font-sprites/tree/v3.0.0/icons/font-awesome-5
+```
+
+| Icon            | Verified | Include Path                     | Macro              |
+| --------------- | -------- | -------------------------------- | ------------------ |
+| mobile_alt      | ✅       | `font-awesome-5/mobile_alt.puml` | `FA5_MOBILE_ALT()` |
+| desktop         | ✅       | `font-awesome-5/desktop.puml`    | `FA5_DESKTOP()`    |
+| exchange_alt    | ✅       | `font-awesome-5/exchange_alt.puml` | `FA5_EXCHANGE_ALT()` |
+| shield_alt      | ✅       | `font-awesome-5/shield_alt.puml` | `FA5_SHIELD_ALT()` |
+| shopping_cart   | ✅       | `font-awesome-5/shopping_cart.puml` | `FA5_SHOPPING_CART()` |
+| boxes           | ✅       | `font-awesome-5/boxes.puml`      | `FA5_BOXES()`      |
+| envelope        | ✅       | `font-awesome-5/envelope.puml`   | `FA5_ENVELOPE()`   |
+| database        | ✅       | `font-awesome-5/database.puml`   | `FA5_DATABASE()`   |
+| cogs            | ✅       | `font-awesome-5/cogs.puml`       | `FA5_COGS()`       |
+| cube            | ✅       | `font-awesome-5/cube.puml`       | `FA5_CUBE()`       |
+| comments        | ✅       | `font-awesome-5/comments.puml`   | `FA5_COMMENTS()`   |
+
+**⚠️ IMPORTANT**: Always verify icon paths before adding to diagrams. If an icon doesn't exist:
+1. Use a verified alternative from the table above
+2. Check the exact filename in the repository (case-sensitive, underscores/hyphens)
+3. Ensure macro prefix matches icon set (FA5_ for Font-Awesome 5, DEV_ for Devicons, etc.)
 
 ### When to Use Each Approach
 
@@ -586,41 +626,39 @@ AddElementTag("brand-staging", $bgColor="[staging-color]", $fontColor="#FFFFFF",
 
 ## 🚫 COMMON MISTAKE: Mixing Icon Macros with C4 Elements
 
-**INCORRECT** (icon macro used as C4 element):
+**INCORRECT** (trying to use icon macro in C4 boundary):
 
 ```plantuml
 ❌ Container_Boundary(api, "API") {
-    FA5_SERVER(gateway, "Gateway")  ← Wrong! FA5_SERVER is not a C4 macro
+    FA5_SERVER(gateway, "Gateway")  ← Wrong! Can't nest icon macros in C4 boundaries
+    Container(auth, "Auth", "Node.js", "...")  ← Missing Container definition
 }
 ```
 
-**CORRECT** (C4 element with sprite via tag):
+**CORRECT** (separate approaches - don't mix):
 
+**For C4 Diagrams** (use color/border tags, NO sprites):
 ```plantuml
-✅ AddElementTag("api", $bgColor="#4F46E5", $sprite="fa5-server")
-   Container_Boundary(api, "API") {
-       Container(gateway, "Gateway", "Tech", "Description", $tags="api")
-   }
+✅ AddElementTag("api", $bgColor="#4F46E5", $fontColor="#FFFFFF", $borderColor="#3730A3")
+   Container(gateway, "API Gateway", "Node.js", "Routes requests", $tags="api")
 ```
 
-**OR** (icon macro approach, no C4 boundaries):
-
+**For Icon-Rich Infrastructure Diagrams** (use icon macros directly):
 ```plantuml
-✅ FA5_SERVER(gateway, "API Gateway") #Blue
-   FA5_DATABASE(db, "Database") #Red
-
-   gateway --> db
+✅ FA5_DATABASE(gateway, "API Gateway", "node") #Blue
+   FA5_COGS(auth, "Auth Service", "node") #Red
+   gateway --> auth
 ```
 
-Icon macros and C4 elements are **two different approaches**—don't mix them!
+**⚠️ CRITICAL**: Icon macros and C4 elements are **TWO DISTINCT APPROACHES**:
+- Icon macros = Direct visual elements (FA5_*, DEV_*, etc.)
+- C4 with tags = Architectural components (Container, Component) styled with colors/borders
+
+Never use `$sprite=` parameters in C4 `AddElementTag` - use only color/border styling.
 
 ---
 
-| Library                | Use Case                            | Macros                                                                                   |
-| ---------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------- |
-| **C4_Context.puml**    | System Landscape & Context diagrams | `Person`, `Person_Ext`, `System`, `System_Ext`, `System_Boundary`, `Enterprise_Boundary` |
-| **C4_Container.puml**  | Container-level architecture        | `Container`, `ContainerDb`, `ContainerQueue`, `Container_Boundary`                       |
-| **C4_Component.puml**  | Component-level design              | `Component`, `ComponentDb`, `ComponentQueue`, `Component_Boundary`                       |
+## 📊 C4 DIAGRAM TYPES REFERENCE
 | **C4_Dynamic.puml**    | Interaction flows & sequences       | All above + `increment()`, `setIndex()`, `Index()` functions                             |
 | **C4_Deployment.puml** | Infrastructure & deployment         | `Deployment_Node`, `Node`, `Node_L`, `Node_R`                                            |
 | **C4_Sequence.puml**   | C4-styled sequence flows            | Elements reused as participants with `Boundary_End()`                                    |

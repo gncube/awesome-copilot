@@ -1,15 +1,15 @@
-@startuml Microservices-Icon-Sprites-Example
+@startuml Aspire-Microservices-Architecture
 ' ============================================================
-' Microservices Platform with Icon Sprites
+' Aspire Orchestration Microservices Architecture
 ' Following tupadr3/plantuml-icon-font-sprites pattern
-' Demonstrates nested architecture with icon macros
+' Domain-driven design with multiple service boundaries
 ' ============================================================
 
 skinparam defaultTextAlignment center
 
 !$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
 !include $ICONURL/common.puml
-!include $ICONURL/font-awesome-5/user.puml
+!include $ICONURL/font-awesome-5/mobile_alt.puml
 !include $ICONURL/font-awesome-5/desktop.puml
 !include $ICONURL/font-awesome-5/exchange_alt.puml
 !include $ICONURL/font-awesome-5/shield_alt.puml
@@ -17,80 +17,145 @@ skinparam defaultTextAlignment center
 !include $ICONURL/font-awesome-5/boxes.puml
 !include $ICONURL/font-awesome-5/envelope.puml
 !include $ICONURL/font-awesome-5/database.puml
-!include $ICONURL/font-awesome-5/comments.puml
+!include $ICONURL/font-awesome-5/cogs.puml
 !include $ICONURL/devicons/redis.puml
-!include $ICONURL/devicons/mysql.puml
-!include $ICONURL/font-awesome/cube.puml
+!include $ICONURL/devicons/postgresql.puml
+!include $ICONURL/font-awesome-5/cube.puml
+!include $ICONURL/font-awesome-5/comments.puml
 
 ' ----------------------------------------------------------
-' External Internet / End User
+' CLIENT APPLICATIONS (Left Side)
 ' ----------------------------------------------------------
-FA5_USER(endUser, "End User", node) #Gray
+FA5_MOBILE_ALT(mobileApp, "Mobile App", node) #Purple
+FA5_DESKTOP(browserApp, "Browser", node) #Purple
 
 ' ----------------------------------------------------------
-' Microservices Platform Container
+' CLOUD SERVICES (Aspire Orchestration - Main Platform)
 ' ----------------------------------------------------------
-FA_CUBE(platform, "Microservices Platform", node) #Purple {
+FA5_CUBE(aspireOrch, "Aspire Orchestration", node) #Cyan {
 
-    ' Frontend Layer
-    FA5_DESKTOP(webApp, "Web Application", node) #Blue
-
-    ' API Gateway Layer
-    FA5_EXCHANGE_ALT(gateway, "API Gateway", node) #Indigo
-
-    ' Microservices Layer
-    FA5_BOXES(services, "Microservices", node) #Green {
-        FA5_SHIELD_ALT(authService, "Auth Service", node) #Red
-        FA5_SHOPPING_CART(orderService, "Order Service", node) #Orange
-        FA5_BOXES(inventoryService, "Inventory Service", node) #YellowGreen
-        FA5_ENVELOPE(notificationService, "Notification Service", node) #Cyan
+    ' ========== BACKEND FOR FRONTEND (BFF) LAYER ==========
+    FA5_EXCHANGE_ALT(mobileBFF, "Mobile BFF", node) #Blue {
+        FA5_COGS(mobileAPI, "Mobile API", node) #Blue
     }
 
-    ' Data & Cache Layer
-    FA5_DATABASE(dataLayer, "Data & Cache", node) #DarkGreen {
-        DEV_MYSQL(primaryDb, "SQL Database", node) #DarkGreen
-        DEV_REDIS(cache, "Redis Cache", node) #Red
+    ' ========== WEB LAYER ==========
+    FA5_CUBE(webApp, "Web App", node) #Blue {
+        FA5_COGS(blazorApp, "Blazor App", node) #Blue
     }
 
-    ' Message Queue
-    FA5_COMMENTS(messageQueue, "Message Queue", node) #Orange
+    ' ========== MICROSERVICES LAYER ==========
+
+    ' Identity Service Domain
+    FA5_SHIELD_ALT(identityService, "Identity Service", node) #DarkBlue {
+        FA5_COGS(identityAPI, "Identity API", node) #DarkBlue
+        DEV_POSTGRESQL(identityDb, "PostgreSQL", node) #DarkBlue
+    }
+
+    ' Catalog Service Domain
+    FA5_BOXES(catalogService, "Catalog Service", node) #DarkGreen {
+        FA5_COGS(catalogAPI, "Catalog API", node) #DarkGreen
+        DEV_POSTGRESQL(catalogDb, "PostgreSQL", node) #DarkGreen
+    }
+
+    ' Order Service Domain
+    FA5_SHOPPING_CART(orderService, "Order Service", node) #Orange {
+        FA5_COGS(orderingAPI, "Ordering API", node) #Orange
+        FA5_COGS(orderProcessor, "Order Processor", node) #Orange
+        DEV_POSTGRESQL(orderDb, "PostgreSQL", node) #Orange
+    }
+
+    ' Basket Service Domain
+    FA5_COMMENTS(basketService, "Basket Service", node) #Red {
+        FA5_COGS(basketAPI, "Basket API", node) #Red
+        DEV_REDIS(basketCache, "Redis", node) #Red
+    }
+
+    ' Payment Service Domain
+    FA5_COGS(paymentService, "Payment Service", node) #Yellow {
+        FA5_COGS(paymentProcessor, "Payment Processor", node) #Yellow
+    }
+
+    ' Event Bus (Central Messaging)
+    FA5_COMMENTS(eventBus, "Event Bus", node) #Orange
+
+    ' Admin Services
+    FA5_COGS(adminServices, "Admin Services", node) #Purple {
+        FA5_COGS(webhooksAPI, "Webhooks API", node) #Purple
+        DEV_POSTGRESQL(webhooksDb, "PostgreSQL", node) #Purple
+    }
 }
 
 ' ----------------------------------------------------------
-' External Systems
+' EXTERNAL SERVICES (Right Side)
 ' ----------------------------------------------------------
-FA5_SHIELD_ALT(entraId, "Entra ID", node) #Blue
-FA5_ENVELOPE(sendgrid, "SendGrid", node) #Red
+FA5_COGS(openai, "OpenAI", node) #Cyan
+FA5_COGS(observability, "Observability", node) #Green
 
 ' ----------------------------------------------------------
-' Relationships / Communication Flows
+' EXTERNAL CLIENTS
 ' ----------------------------------------------------------
+FA5_ENVELOPE(webhookClient, "Webhook Client", node) #Gray
 
-' User to Frontend
-endUser --> webApp : browses
+' ----------------------------------------------------------
+' RELATIONSHIPS: CLIENT → BFF/WEB APP
+' ----------------------------------------------------------
+mobileApp --> mobileAPI : calls
+browserApp --> blazorApp : loads
 
-' Frontend to Gateway
-webApp --> gateway : calls API
+' ----------------------------------------------------------
+' RELATIONSHIPS: BFF/WEB → MICROSERVICES
+' ----------------------------------------------------------
+mobileAPI --> identityAPI : auth
+mobileAPI --> catalogAPI : products
+mobileAPI --> orderingAPI : orders
+mobileAPI --> basketAPI : cart
 
-' Gateway to Microservices
-gateway --> authService : routes auth
-gateway --> orderService : routes orders
-gateway --> inventoryService : routes inventory
+blazorApp --> identityAPI : auth
+blazorApp --> catalogAPI : products
+blazorApp --> orderingAPI : orders
+blazorApp --> basketAPI : cart
 
-' Inter-Service Communication
-orderService ..> inventoryService : queries stock
-orderService --> messageQueue : publishes events
-notificationService --> messageQueue : subscribes
+' ----------------------------------------------------------
+' RELATIONSHIPS: SERVICE → SERVICE (Inter-Service)
+' ----------------------------------------------------------
+orderingAPI --> catalogAPI : queries stock
+orderingAPI --> basketAPI : gets cart
+orderingAPI --> paymentProcessor : process payment
+orderProcessor --> eventBus : publishes OrderCreated
+basketAPI --> eventBus : publishes BasketCheckout
 
-' Data Access
-authService --> primaryDb : reads/writes
-orderService --> primaryDb : reads/writes
-inventoryService --> primaryDb : reads/writes
-orderService --> cache : caches data
-inventoryService --> cache : caches data
+' ----------------------------------------------------------
+' RELATIONSHIPS: SERVICE → DATABASE
+' ----------------------------------------------------------
+identityAPI --> identityDb : stores users
+catalogAPI --> catalogDb : stores products
+orderingAPI --> orderDb : stores orders
+orderProcessor --> orderDb : updates orders
+basketAPI --> basketCache : session cache
+webhooksAPI --> webhooksDb : stores webhooks
 
-' External Integrations
-authService --> entraId : validates tokens
-notificationService --> sendgrid : sends emails
+' ----------------------------------------------------------
+' RELATIONSHIPS: SERVICE → EVENT BUS
+' ----------------------------------------------------------
+orderingAPI --> eventBus : publishes
+paymentProcessor --> eventBus : publishes
+basketAPI --> eventBus : publishes
+
+' ----------------------------------------------------------
+' RELATIONSHIPS: EVENT BUS → CONSUMERS
+' ----------------------------------------------------------
+eventBus --> orderProcessor : consumes
+eventBus --> webhooksAPI : consumes
+eventBus --> observability : emits metrics
+
+' ----------------------------------------------------------
+' RELATIONSHIPS: EXTERNAL INTEGRATIONS
+' ----------------------------------------------------------
+catalogAPI --> openai : product descriptions
+paymentProcessor --> openai : fraud detection
+identityAPI --> observability : logs/traces
+orderingAPI --> observability : logs/traces
+webhookClient --> webhooksAPI : triggers
 
 @enduml
