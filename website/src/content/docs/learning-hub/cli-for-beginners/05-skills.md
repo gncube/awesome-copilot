@@ -3,7 +3,7 @@ title: '05 · Automate Repetitive Tasks'
 description: 'Mirror the source chapter on skills that load automatically for repeated GitHub Copilot CLI workflows.'
 authors:
   - GitHub Copilot Learning Hub Team
-lastUpdated: 2026-03-20
+lastUpdated: 2026-05-15
 ---
 
 ![Chapter 05: Skills System](/images/learning-hub/copilot-cli-for-beginners/05/chapter-header.png)
@@ -64,7 +64,7 @@ Learn what skills are, why they matter, and how they differ from agents and MCP.
    ```
    This shows all skills Copilot can find in your project and personal folders.
 
-2. **Look at a real skill file:** Check out our provided [code-checklist SKILL.md](https://github.com/github/copilot-cli-for-beginners/blob/main/github/skills/code-checklist/SKILL.md) to see the pattern. It's just YAML frontmatter plus markdown instructions.
+2. **Look at a real skill file:** Check out our provided [code-checklist SKILL.md](https://github.com/github/copilot-cli-for-beginners/blob/main/.github/skills/code-checklist/SKILL.md) to see the pattern. It's just YAML frontmatter plus markdown instructions.
 
 3. **Understand the core concept:** Skills are task-specific instructions that Copilot loads *automatically* when your prompt matches the skill's description. You don't need to activate them, just ask naturally.
 
@@ -91,7 +91,7 @@ copilot
 
 > 💡 **Key Insight**: Skills are **automatically triggered** based on your prompt matching the skill's description. Just ask naturally and Copilot applies relevant skills behind the scenes. You can also invoke skills directly as well which you'll learn about next.
 
-> 🧰 **Ready-to-use templates**: Check out the [.github/skills](../.github/skills/) folder for simple copy-paste skills you can try out.
+> 🧰 **Ready-to-use templates**: Check out the [.github/skills](https://github.com/github/copilot-cli-for-beginners/tree/main/.github/skills/) folder for simple copy-paste skills you can try out.
 
 ### Direct Slash Command Invocation
 
@@ -106,6 +106,20 @@ While auto-triggering is the primary way skills work, you can also **invoke skil
 ```
 
 This gives you explicit control when you want to ensure a specific skill is used.
+
+#### Combining Multiple Skills in One Message
+
+You can invoke **more than one skill in a single message**, and the skill slash command can appear anywhere in your prompt — not just at the beginning. This is handy when you want two different checks done in one go:
+
+```bash
+> Check @samples/book-app-project/book_app.py with /code-checklist and also run /generate-tests for it
+
+> Review the auth module /security-audit then /code-checklist the result
+```
+
+Copilot will apply each named skill in the same response, saving you from sending multiple separate messages.
+
+> 💡 **Tip**: Put the skill slash commands wherever they feel most natural in your sentence. You can put them at the start, middle, or end of your message.
 
 > 📝 **Skills vs Agents Invocation**: Don't confuse skill invocation with agent invocation:
 > - **Skills**: `/skill-name <prompt>`, e.g., `/code-checklist Check this file`
@@ -591,7 +605,7 @@ Apply what you've learned by building and testing your own skills.
 
 ### Build More Skills
 
-Here are two more skills showing different patterns. Follow the same `mkdir` + `cat` workflow from "Creating Your First Skill" above or copy and paste the skills into the proper location. More examples are available in [.github/skills](../.github/skills).
+Here are two more skills showing different patterns. Follow the same `mkdir` + `cat` workflow from "Creating Your First Skill" above or copy and paste the skills into the proper location. More examples are available in [.github/skills](https://github.com/github/copilot-cli-for-beginners/tree/main/.github/skills).
 
 ### pytest Test Generation Skill
 
