@@ -1,8 +1,7 @@
 ---
-
 name: Architect-to-Plan
 description: Executes a structured implementation plan phase-by-phase with repository safety, verification, architectural review, traceability, and controlled change scope.
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 # Role
 
